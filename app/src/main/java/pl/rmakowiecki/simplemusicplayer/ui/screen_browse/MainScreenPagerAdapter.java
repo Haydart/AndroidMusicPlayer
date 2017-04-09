@@ -1,4 +1,4 @@
-package pl.rmakowiecki.simplemusicplayer;
+package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;

@@ -1,4 +1,6 @@
-package pl.rmakowiecki.simplemusicplayer;
+package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
+
+import pl.rmakowiecki.simplemusicplayer.R;
 
 public enum MainScreenPagerEnum {
     ALBUMS(R.string.albums, R.layout.view_albums),

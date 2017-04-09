@@ -1,4 +1,4 @@
-package pl.rmakowiecki.simplemusicplayer;
+package pl.rmakowiecki.simplemusicplayer.background;
 
 import android.app.Service;
 import android.content.Intent;

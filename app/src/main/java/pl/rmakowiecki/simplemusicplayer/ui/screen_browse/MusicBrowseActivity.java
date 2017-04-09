@@ -1,4 +1,4 @@
-package pl.rmakowiecki.simplemusicplayer;
+package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -7,8 +7,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.rmakowiecki.simplemusicplayer.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MusicBrowseActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.container) ViewPager viewPager;

@@ -8,8 +8,11 @@ import android.support.v7.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.rmakowiecki.simplemusicplayer.R;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.dummy.DummyContent;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
 
-public class MusicBrowseActivity extends AppCompatActivity {
+public class MusicBrowseActivity extends AppCompatActivity implements SongsFragment.OnListFragmentInteractionListener, AlbumsFragment.OnListFragmentInteractionListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.container) ViewPager viewPager;
@@ -21,9 +24,18 @@ public class MusicBrowseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.app_name);
-        viewPager.setAdapter(new MainScreenPagerAdapter(this));
+        viewPager.setAdapter(new BrowseScreenPagerAdapter(getSupportFragmentManager(), this));
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onAlbumsListInteraction(DummyContent.DummyItem item) {
+        //no-op
+    }
+
+    @Override
+    public void onSongsListInteraction(pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.dummy.DummyContent.DummyItem item) {
+        //no-op
     }
 }

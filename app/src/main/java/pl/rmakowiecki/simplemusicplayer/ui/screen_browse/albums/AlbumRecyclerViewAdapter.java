@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment.OnListFragmentInteractionListener;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.dummy.DummyContent.DummyItem;
 
@@ -43,9 +44,7 @@ public class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumRecycler
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onAlbumsListInteraction(holder.mItem);
                 }
             }
         });

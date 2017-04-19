@@ -5,10 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
@@ -35,7 +31,7 @@ class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
 
         if (position == 0) {
             result = SongsFragment.newInstance();
-            args.putParcelableArrayList("songs", (ArrayList<Song>)songList);
+            args.putParcelableArrayList(SongsFragment.SONGS, (ArrayList<Song>) songList);
         } else {
             result = AlbumsFragment.newInstance();
         }

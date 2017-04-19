@@ -22,6 +22,7 @@ import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.dummy.DummyConte
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
 
 import static android.provider.BaseColumns._ID;
+import static android.provider.MediaStore.Audio.AudioColumns.ALBUM;
 import static android.provider.MediaStore.Audio.AudioColumns.ARTIST;
 import static android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 import static android.provider.MediaStore.MediaColumns.TITLE;
@@ -68,11 +69,13 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
             int titleColumn = musicCursor.getColumnIndex(TITLE);
             int idColumn = musicCursor.getColumnIndex(_ID);
             int artistColumn = musicCursor.getColumnIndex(ARTIST);
+            int albumCoverColumn = musicCursor.getColumnIndex(ALBUM);
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
-                songList.add(new Song(thisId, thisTitle, thisArtist));
+                String thisAlbumCover = musicCursor.getString(albumCoverColumn);
+                songList.add(new Song(thisId, thisTitle, thisArtist, thisAlbumCover));
             }
             while (musicCursor.moveToNext());
         }

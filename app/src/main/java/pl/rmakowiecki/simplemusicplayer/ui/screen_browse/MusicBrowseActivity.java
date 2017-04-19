@@ -14,16 +14,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.dummy.DummyContent;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MusicBrowseActivity extends AppCompatActivity implements SongsFragment.SongClickListener, AlbumsFragment.OnListFragmentInteractionListener {
 
@@ -49,20 +46,15 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
     private void managePermissionResponse(Boolean granted) {
         if (granted) {
             getSongsList();
-            Observable.just(null)
-                    .delay(3000, TimeUnit.MILLISECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(ignored -> {
-                        viewPager.setAdapter(new BrowseScreenPagerAdapter(getSupportFragmentManager(), this, songList));
-                        tabLayout.setupWithViewPager(viewPager);
-                    });
+            viewPager.setAdapter(new BrowseScreenPagerAdapter(getSupportFragmentManager(), this, songList));
+            tabLayout.setupWithViewPager(viewPager);
         } else {
             Toast.makeText(this, "Granting permissions is required", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void getSongsList() {
         songList = new ArrayList<>();
         ContentResolver musicResolver = getContentResolver();
@@ -84,15 +76,17 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
             }
             while (musicCursor.moveToNext());
         }
+        musicCursor.close();
+        Collections.sort(songList, (a, b) -> a.getTitle().compareTo(b.getTitle()));
     }
 
     @Override
     public void onSongClicked(Song item) {
-
+        // TODO: 19/04/2017 implement
     }
 
     @Override
     public void onAlbumsListInteraction(DummyContent.DummyItem item) {
-
+        // TODO: 19/04/2017 implement
     }
 }

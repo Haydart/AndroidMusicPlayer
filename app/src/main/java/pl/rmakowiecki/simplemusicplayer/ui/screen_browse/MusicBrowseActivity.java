@@ -3,7 +3,6 @@ package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -21,6 +20,11 @@ import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.dummy.DummyContent;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
+
+import static android.provider.BaseColumns._ID;
+import static android.provider.MediaStore.Audio.AudioColumns.ARTIST;
+import static android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+import static android.provider.MediaStore.MediaColumns.TITLE;
 
 public class MusicBrowseActivity extends AppCompatActivity implements SongsFragment.SongClickListener, AlbumsFragment.OnListFragmentInteractionListener {
 
@@ -58,16 +62,12 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
     private void getSongsList() {
         songList = new ArrayList<>();
         ContentResolver musicResolver = getContentResolver();
-        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+        Cursor musicCursor = musicResolver.query(EXTERNAL_CONTENT_URI, null, null, null, null);
 
         if (musicCursor != null && musicCursor.moveToFirst()) {
-            int titleColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media.TITLE);
-            int idColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media._ID);
-            int artistColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media.ARTIST);
+            int titleColumn = musicCursor.getColumnIndex(TITLE);
+            int idColumn = musicCursor.getColumnIndex(_ID);
+            int artistColumn = musicCursor.getColumnIndex(ARTIST);
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);

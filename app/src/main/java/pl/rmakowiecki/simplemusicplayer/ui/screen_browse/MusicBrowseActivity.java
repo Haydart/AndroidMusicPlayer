@@ -2,7 +2,9 @@ package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -22,13 +24,14 @@ import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.dummy.DummyConte
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
 
 import static android.provider.BaseColumns._ID;
-import static android.provider.MediaStore.Audio.AudioColumns.ALBUM;
+import static android.provider.MediaStore.Audio.AudioColumns.ALBUM_ID;
 import static android.provider.MediaStore.Audio.AudioColumns.ARTIST;
 import static android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 import static android.provider.MediaStore.MediaColumns.TITLE;
 
 public class MusicBrowseActivity extends AppCompatActivity implements SongsFragment.SongClickListener, AlbumsFragment.OnListFragmentInteractionListener {
 
+    public static final String ALBUM_COVER_DIRECTORY = "content://media/external/audio/albumart";
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.container) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabLayout;
@@ -69,13 +72,15 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
             int titleColumn = musicCursor.getColumnIndex(TITLE);
             int idColumn = musicCursor.getColumnIndex(_ID);
             int artistColumn = musicCursor.getColumnIndex(ARTIST);
-            int albumCoverColumn = musicCursor.getColumnIndex(ALBUM);
+            int albumCoverColumn = musicCursor.getColumnIndex(ALBUM_ID);
             do {
                 long thisId = musicCursor.getLong(idColumn);
-                String thisTitle = musicCursor.getString(titleColumn);
-                String thisArtist = musicCursor.getString(artistColumn);
-                String thisAlbumCover = musicCursor.getString(albumCoverColumn);
-                songList.add(new Song(thisId, thisTitle, thisArtist, thisAlbumCover));
+                String songTitle = musicCursor.getString(titleColumn);
+                String songArtist = musicCursor.getString(artistColumn);
+                long albumCoverId = musicCursor.getLong(albumCoverColumn);
+                Uri albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY);
+                Uri albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, albumCoverId);
+                songList.add(new Song(thisId, songTitle, songArtist, albumArtUri));
             }
             while (musicCursor.moveToNext());
         }

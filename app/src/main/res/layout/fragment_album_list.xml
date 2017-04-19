@@ -10,4 +10,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment"
-    tools:listitem="@layout/fragment_album" />
+    tools:listitem="@layout/fragment_album_list_row" />

@@ -11,8 +11,7 @@
         android:layout_width="@dimen/song_list_image_size"
         android:layout_height="@dimen/song_list_image_size"
         android:layout_marginLeft="@dimen/standard_margin_large"
-        android:layout_gravity="center"
-        android:background="@android:color/black"/>
+        android:layout_gravity="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +33,5 @@
             android:layout_height="24dp"
             android:textAppearance="?attr/textAppearanceListItem"
             tools:text="Artist" />
-
     </LinearLayout>
-
 </LinearLayout>

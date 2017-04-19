@@ -10,4 +10,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.screen_browse.tracks.SongsFragment"
-    tools:listitem="@layout/fragment_song" />
+    tools:listitem="@layout/fragment_song_list_row" />

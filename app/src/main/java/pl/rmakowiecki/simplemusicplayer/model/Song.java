@@ -1,5 +1,6 @@
 package pl.rmakowiecki.simplemusicplayer.model;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,20 +8,20 @@ public final class Song implements Parcelable {
     private final long id;
     private final String title;
     private final String artist;
-    private final String albumCoverPath;
+    private final Uri albumCoverUri;
 
-    public Song(long id, String title, String artist, String albumCoverPath) {
+    public Song(long id, String title, String artist, Uri albumCoverPath) {
         this.id = id;
         this.title = title;
         this.artist = artist;
-        this.albumCoverPath = albumCoverPath;
+        this.albumCoverUri = albumCoverPath;
     }
 
     protected Song(Parcel in) {
         id = in.readLong();
         title = in.readString();
         artist = in.readString();
-        albumCoverPath = in.readString();
+        albumCoverUri = Uri.parse(in.readString());
     }
 
     public static final Creator<Song> CREATOR = new Creator<Song>() {
@@ -47,8 +48,8 @@ public final class Song implements Parcelable {
         return artist;
     }
 
-    public String getAlbumCoverPath() {
-        return albumCoverPath;
+    public Uri getAlbumCoverUri() {
+        return albumCoverUri;
     }
 
     @Override
@@ -61,6 +62,6 @@ public final class Song implements Parcelable {
         dest.writeLong(id);
         dest.writeString(title);
         dest.writeString(artist);
-        dest.writeString(albumCoverPath);
+        dest.writeString(albumCoverUri.toString());
     }
 }

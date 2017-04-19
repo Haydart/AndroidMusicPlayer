@@ -1,3 +1,7 @@
+plugins {
+	id 'pl.droidsonroids.localization' version '1.0.10'
+	id "me.tatarka.retrolambda" version "3.6.0"
+}
 apply plugin: 'com.android.application'
 
 ext {
@@ -21,6 +25,10 @@ android {
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
+	compileOptions {
+		targetCompatibility 1.8
+		sourceCompatibility 1.8
+	}
 }
 
 dependencies {
@@ -29,18 +37,18 @@ dependencies {
 		exclude group: 'com.android.support', module: 'support-annotations'
 	})
 
-	//Android
 	compile "com.android.support:appcompat-v7:${build_version}"
 	compile "com.android.support:support-v4:${build_version}"
 	compile "com.android.support:design:${build_version}"
 	compile "com.android.support:support-fragment:${build_version}"
-
-	//Butterknife
-
 	compile 'com.android.support.constraint:constraint-layout:1.0.2'
+	compile 'io.reactivex:rxandroid:1.2.1'
+	compile 'io.reactivex:rxjava:1.2.1'
+	compile 'com.artemzin.rxjava:proguard-rules:1.2.1.0'
 	compile 'com.jakewharton:butterknife:8.5.1'
 	compile 'com.android.support:support-v4:25.2.0'
 	compile 'com.android.support:recyclerview-v7:25.2.0'
+	compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
 	testCompile 'junit:junit:4.12'
 	annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }

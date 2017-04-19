@@ -9,17 +9,22 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import java.util.ArrayList;
+import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
+import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
 
 class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
     private static final String PAGE_POSITION = "page_position";
     private Context context;
+    private List<Song> songList;
 
-    public BrowseScreenPagerAdapter(FragmentManager fragmentManager, Context context) {
+    public BrowseScreenPagerAdapter(FragmentManager fragmentManager, Context context, List<Song> songList) {
         super(fragmentManager);
         this.context = context;
+        this.songList = songList;
     }
 
     @Override
@@ -30,6 +35,7 @@ class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
 
         if (position == 0) {
             result = SongsFragment.newInstance();
+            args.putParcelableArrayList("songs", (ArrayList<Song>)songList);
         } else {
             result = AlbumsFragment.newInstance();
         }

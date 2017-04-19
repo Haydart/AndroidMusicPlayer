@@ -1,22 +1,37 @@
 package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.tbruyelle.rxpermissions.RxPermissions;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import pl.rmakowiecki.simplemusicplayer.R;
+import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.dummy.DummyContent;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class MusicBrowseActivity extends AppCompatActivity implements SongsFragment.OnListFragmentInteractionListener, AlbumsFragment.OnListFragmentInteractionListener {
+public class MusicBrowseActivity extends AppCompatActivity implements SongsFragment.SongClickListener, AlbumsFragment.OnListFragmentInteractionListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.container) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabLayout;
+
+    private List<Song> songList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,17 +40,59 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
-        viewPager.setAdapter(new BrowseScreenPagerAdapter(getSupportFragmentManager(), this));
-        tabLayout.setupWithViewPager(viewPager);
+
+        new RxPermissions(this)
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(this::managePermissionResponse);
+    }
+
+    private void managePermissionResponse(Boolean granted) {
+        if (granted) {
+            getSongsList();
+            Observable.just(null)
+                    .delay(3000, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(ignored -> {
+                        viewPager.setAdapter(new BrowseScreenPagerAdapter(getSupportFragmentManager(), this, songList));
+                        tabLayout.setupWithViewPager(viewPager);
+                    });
+        } else {
+            Toast.makeText(this, "Granting permissions is required", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    private void getSongsList() {
+        songList = new ArrayList<>();
+        ContentResolver musicResolver = getContentResolver();
+        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+
+        if (musicCursor != null && musicCursor.moveToFirst()) {
+            int titleColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media.TITLE);
+            int idColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media._ID);
+            int artistColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media.ARTIST);
+            do {
+                long thisId = musicCursor.getLong(idColumn);
+                String thisTitle = musicCursor.getString(titleColumn);
+                String thisArtist = musicCursor.getString(artistColumn);
+                songList.add(new Song(thisId, thisTitle, thisArtist));
+            }
+            while (musicCursor.moveToNext());
+        }
+    }
+
+    @Override
+    public void onSongClicked(Song item) {
+
     }
 
     @Override
     public void onAlbumsListInteraction(DummyContent.DummyItem item) {
-        //no-op
-    }
 
-    @Override
-    public void onSongsListInteraction(pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.dummy.DummyContent.DummyItem item) {
-        //no-op
     }
 }

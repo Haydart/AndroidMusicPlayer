@@ -7,19 +7,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pl.rmakowiecki.simplemusicplayer.R;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment.OnListFragmentInteractionListener;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.dummy.DummyContent.DummyItem;
+import pl.rmakowiecki.simplemusicplayer.model.Song;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment.SongClickListener;
 
 import java.util.List;
 
 public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<Song> dataSource;
+    private final SongClickListener listener;
 
-    public SongRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public SongRecyclerViewAdapter(List<Song> dataSource, SongClickListener listener) {
+        this.dataSource = dataSource;
+        this.listener = listener;
     }
 
     @Override
@@ -31,43 +31,38 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = dataSource.get(position);
+        holder.titleTextView.setText(dataSource.get(position).getTitle());
+        holder.artistTextView.setText(dataSource.get(position).getArtist());
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onSongsListInteraction(holder.mItem);
-                }
+        holder.view.setOnClickListener(v -> {
+            if (null != listener) {
+                listener.onSongClicked(holder.mItem);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return dataSource.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final View view;
+        public final TextView titleTextView;
+        public final TextView artistTextView;
+        public Song mItem;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            this.view = view;
+            titleTextView = (TextView) view.findViewById(R.id.title_text_view);
+            artistTextView = (TextView) view.findViewById(R.id.artist_text_view);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + artistTextView.getText() + "'";
         }
     }
 }

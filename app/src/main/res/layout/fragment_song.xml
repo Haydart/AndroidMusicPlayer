@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/songs_list_row_height"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:background="?attr/selectableItemBackground">
 
-    <TextView
-        android:id="@+id/id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+    <ImageView
+        android:id="@+id/album_cover_image"
+        android:layout_width="@dimen/song_list_image_size"
+        android:layout_height="@dimen/song_list_image_size"
+        android:layout_marginLeft="@dimen/standard_margin_large"
+        android:layout_gravity="center"
+        android:background="@android:color/black"/>
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/standard_margin_large">
+
+        <TextView
+            android:id="@+id/title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            tools:text="Title"/>
+
+        <TextView
+            android:id="@+id/artist_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            tools:text="Artist" />
+
+    </LinearLayout>
+
 </LinearLayout>

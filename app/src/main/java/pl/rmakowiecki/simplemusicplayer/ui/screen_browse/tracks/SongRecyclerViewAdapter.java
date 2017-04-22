@@ -52,8 +52,8 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
 
         SongViewHolder(View view) {
             super(view);
-            this.view = view;
             ButterKnife.bind(this, view);
+            this.view = view;
         }
 
         void bindView(Song song) {

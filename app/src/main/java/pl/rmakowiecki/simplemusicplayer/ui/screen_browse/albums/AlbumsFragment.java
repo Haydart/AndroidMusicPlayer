@@ -4,19 +4,20 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.dummy.DummyContent;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.dummy.DummyContent.DummyItem;
+import pl.rmakowiecki.simplemusicplayer.model.Album;
 
 public class AlbumsFragment extends Fragment {
 
     private static final int COLUMN_COUNT = 2;
-    private OnListFragmentInteractionListener mListener;
+    public static final String ALBUMS = "albums";
+    private AlbumClickListener listener;
 
     public AlbumsFragment() {
     }
@@ -34,7 +35,8 @@ public class AlbumsFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new GridLayoutManager(context, COLUMN_COUNT));
-            recyclerView.setAdapter(new AlbumRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            List<Album> albumList = getArguments().getParcelableArrayList(ALBUMS);
+            recyclerView.setAdapter(new AlbumRecyclerViewAdapter(albumList, listener));
         }
         return view;
     }
@@ -42,8 +44,8 @@ public class AlbumsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof AlbumClickListener) {
+            listener = (AlbumClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement SongClickListener");
@@ -53,10 +55,10 @@ public class AlbumsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onAlbumsListInteraction(DummyItem item);
+    public interface AlbumClickListener {
+        void onAlbumClicked(int adapterPosition, Album album, ImageView albumCoverImageView);
     }
 }

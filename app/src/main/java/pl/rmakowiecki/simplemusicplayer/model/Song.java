@@ -9,32 +9,23 @@ public final class Song implements Parcelable {
     private final String title;
     private final String artist;
     private final Uri albumCoverUri;
+    private final int durationMillis;
 
-    public Song(long id, String title, String artist, Uri albumCoverPath) {
+    public Song(long id, String title, String artist, Uri albumCoverUri, int durationMillis) {
         this.id = id;
         this.title = title;
         this.artist = artist;
-        this.albumCoverUri = albumCoverPath;
+        this.albumCoverUri = albumCoverUri;
+        this.durationMillis = durationMillis;
     }
 
     protected Song(Parcel in) {
         id = in.readLong();
         title = in.readString();
         artist = in.readString();
-        albumCoverUri = Uri.parse(in.readString());
+        albumCoverUri = in.readParcelable(Uri.class.getClassLoader());
+        durationMillis = in.readInt();
     }
-
-    public static final Creator<Song> CREATOR = new Creator<Song>() {
-        @Override
-        public Song createFromParcel(Parcel in) {
-            return new Song(in);
-        }
-
-        @Override
-        public Song[] newArray(int size) {
-            return new Song[size];
-        }
-    };
 
     public long getId() {
         return id;
@@ -52,6 +43,22 @@ public final class Song implements Parcelable {
         return albumCoverUri;
     }
 
+    public int getDurationMillis() {
+        return durationMillis;
+    }
+
+    public static final Creator<Song> CREATOR = new Creator<Song>() {
+        @Override
+        public Song createFromParcel(Parcel in) {
+            return new Song(in);
+        }
+
+        @Override
+        public Song[] newArray(int size) {
+            return new Song[size];
+        }
+    };
+
     @Override
     public int describeContents() {
         return 0;
@@ -62,6 +69,7 @@ public final class Song implements Parcelable {
         dest.writeLong(id);
         dest.writeString(title);
         dest.writeString(artist);
-        dest.writeString(albumCoverUri.toString());
+        dest.writeParcelable(albumCoverUri, flags);
+        dest.writeInt(durationMillis);
     }
 }

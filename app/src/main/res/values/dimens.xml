@@ -6,4 +6,8 @@
     <dimen name="standard_margin_large">16dp</dimen>
     <dimen name="song_list_image_size">44dp</dimen>
     <dimen name="songs_list_row_height">64dp</dimen>
+    <dimen name="card_image_view_height">140dp</dimen>
+    <dimen name="card_content_padding">4dp</dimen>
+    <dimen name="card_corner_radius">2dp</dimen>
+    <dimen name="standard_margin_small">4dp</dimen>
 </resources>

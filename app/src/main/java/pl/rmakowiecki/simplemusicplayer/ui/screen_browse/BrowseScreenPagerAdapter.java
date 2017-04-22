@@ -2,12 +2,14 @@ package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
+import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
@@ -16,11 +18,13 @@ class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
     private static final String PAGE_POSITION = "page_position";
     private Context context;
     private List<Song> songList;
+    private final List<Album> albumList;
 
-    public BrowseScreenPagerAdapter(FragmentManager fragmentManager, Context context, List<Song> songList) {
+    public BrowseScreenPagerAdapter(FragmentManager fragmentManager, Context context, List<Song> songList, List<Album> albumList) {
         super(fragmentManager);
         this.context = context;
         this.songList = songList;
+        this.albumList = albumList;
     }
 
     @Override
@@ -34,6 +38,7 @@ class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
             args.putParcelableArrayList(SongsFragment.SONGS, (ArrayList<Song>) songList);
         } else {
             result = AlbumsFragment.newInstance();
+            args.putParcelableArrayList(AlbumsFragment.ALBUMS, (ArrayList<? extends Parcelable>) albumList);
         }
         result.setArguments(args);
         return result;

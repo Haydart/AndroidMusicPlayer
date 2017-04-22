@@ -1,4 +1,4 @@
-package pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks;
+package pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs;
 
 import android.content.Context;
 import android.os.Bundle;

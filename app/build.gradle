@@ -43,6 +43,7 @@ dependencies {
 	compile "com.android.support:support-fragment:${build_version}"
 	compile "com.android.support:recyclerview-v7:${build_version}"
 	compile "com.android.support:cardview-v7:${build_version}"
+	compile "com.android.support:percent:${build_version}"
 	compile 'com.squareup.picasso:picasso:2.5.2'
 	compile 'com.android.support.constraint:constraint-layout:1.0.2'
 	compile 'io.reactivex:rxandroid:1.2.1'

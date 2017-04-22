@@ -10,4 +10,7 @@
     <dimen name="card_content_padding">4dp</dimen>
     <dimen name="card_corner_radius">2dp</dimen>
     <dimen name="standard_margin_small">4dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="song_list_item_textview_height">24dp</dimen>
 </resources>

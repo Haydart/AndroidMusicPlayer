@@ -23,14 +23,14 @@
         <TextView
             android:id="@+id/title_text_view"
             android:layout_width="match_parent"
-            android:layout_height="24dp"
+            android:layout_height="@dimen/song_list_item_textview_height"
             android:textAppearance="?attr/textAppearanceListItem"
             tools:text="Title"/>
 
         <TextView
             android:id="@+id/artist_text_view"
             android:layout_width="match_parent"
-            android:layout_height="24dp"
+            android:layout_height="@dimen/song_list_item_textview_height"
             android:textAppearance="?attr/textAppearanceListItem"
             tools:text="Artist" />
     </LinearLayout>

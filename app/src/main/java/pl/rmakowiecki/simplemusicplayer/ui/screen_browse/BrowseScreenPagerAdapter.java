@@ -12,7 +12,7 @@ import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
 
 class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
     private static final String PAGE_POSITION = "page_position";

@@ -1,4 +1,4 @@
-package pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks;
+package pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment.SongClickListener;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment.SongClickListener;
 
 public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerViewAdapter.SongViewHolder> {
 
@@ -30,7 +30,7 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.fragment_song_list_row, parent, false);
+                .inflate(R.layout.fragment_song_list_item, parent, false);
         return new SongViewHolder(view);
     }
 

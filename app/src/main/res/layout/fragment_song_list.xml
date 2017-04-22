@@ -6,8 +6,8 @@
     android:name="pl.rmakowiecki.simplemusicplayer.ui.screen_play.tracks.SongFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginLeft="@dimen/standard_margin_large"
+    android:layout_marginRight="@dimen/standard_margin_large"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.screen_browse.tracks.SongsFragment"
-    tools:listitem="@layout/fragment_song_list_row" />
+    tools:context=".ui.screen_browse.songs.SongsFragment"
+    tools:listitem="@layout/fragment_song_list_item" />

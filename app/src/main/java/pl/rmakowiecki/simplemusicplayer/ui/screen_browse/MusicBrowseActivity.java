@@ -26,9 +26,9 @@ import pl.rmakowiecki.simplemusicplayer.Constants;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list.AlbumSongsListActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.tracks.SongsFragment;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlayActivity;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
 
 import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.Audio.AudioColumns.ALBUM;
@@ -109,12 +109,10 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
             int titleColumn = musicCursor.getColumnIndex(Albums.ALBUM);
             int idColumn = musicCursor.getColumnIndex(Albums._ID);
             int artistColumn = musicCursor.getColumnIndex(Albums.ARTIST);
-            int albumCoverColumn = musicCursor.getColumnIndex(Albums.ALBUM_ART);
             do {
                 long id = musicCursor.getLong(idColumn);
                 String name = musicCursor.getString(titleColumn);
                 String artist = musicCursor.getString(artistColumn);
-                long albumCoverId = musicCursor.getLong(albumCoverColumn);
                 Uri albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY);
                 Uri albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, id);
                 albumsList.add(new Album(id, name, artist, null, albumArtUri));
@@ -132,7 +130,7 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
 
     @Override
     public void onAlbumClicked(int adapterPosition, Album album, ImageView albumCoverImageView) {
-        Intent intent = new Intent(this, MusicPlayActivity.class);
+        Intent intent = new Intent(this, AlbumSongsListActivity.class);
         intent.putExtra(Constants.EXTRA_ALBUM_MODEL, album);
         intent.putExtra(Constants.EXTRA_ALBUM_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(albumCoverImageView));
 

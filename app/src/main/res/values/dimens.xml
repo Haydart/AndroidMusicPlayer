@@ -13,4 +13,7 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="song_list_item_textview_height">24dp</dimen>
+    <dimen name="standard_elevation">4dp</dimen>
+    <dimen name="standard_margin_smallest">2dp</dimen>
+    <dimen name="album_song_list_cover_size">144dp</dimen>
 </resources>

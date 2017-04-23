@@ -25,13 +25,11 @@
         <activity
             android:name=".ui.screen_play.MusicPlayActivity"
             android:screenOrientation="portrait" />
-
-        <service android:name=".background.MusicPlayerService" />
-
         <activity
             android:name=".ui.screen_album_songs_list.AlbumSongListActivity"
-            android:label="@string/title_activity_album_songs_list"
-            android:theme="@style/AppTheme"></activity>
+            android:screenOrientation="portrait" />
+
+        <service android:name=".background.MusicPlayerService" />
     </application>
 
 </manifest>

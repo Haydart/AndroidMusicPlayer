@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Audio.Albums;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
@@ -41,6 +42,7 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
 
     public static final String ALBUM_COVER_DIRECTORY = "content://media/external/audio/albumart";
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.appbar) AppBarLayout appBar;
     @BindView(R.id.container) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabLayout;
 
@@ -54,20 +56,10 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
-        toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
 
         new RxPermissions(this)
                 .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(this::managePermissionResponse);
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     private void managePermissionResponse(Boolean granted) {

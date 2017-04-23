@@ -29,7 +29,7 @@
         <service android:name=".background.MusicPlayerService" />
 
         <activity
-            android:name=".ui.screen_album_songs_list.AlbumSongsListActivity"
+            android:name=".ui.screen_album_songs_list.AlbumSongListActivity"
             android:label="@string/title_activity_album_songs_list"
             android:theme="@style/AppTheme"></activity>
     </application>

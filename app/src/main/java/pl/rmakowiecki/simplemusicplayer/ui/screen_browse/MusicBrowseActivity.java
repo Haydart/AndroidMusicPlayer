@@ -26,7 +26,7 @@ import pl.rmakowiecki.simplemusicplayer.Constants;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list.AlbumSongsListActivity;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list.AlbumSongListActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
 
@@ -54,10 +54,20 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
+        toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
 
         new RxPermissions(this)
                 .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(this::managePermissionResponse);
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     private void managePermissionResponse(Boolean granted) {
@@ -130,7 +140,7 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
 
     @Override
     public void onAlbumClicked(int adapterPosition, Album album, ImageView albumCoverImageView) {
-        Intent intent = new Intent(this, AlbumSongsListActivity.class);
+        Intent intent = new Intent(this, AlbumSongListActivity.class);
         intent.putExtra(Constants.EXTRA_ALBUM_MODEL, album);
         intent.putExtra(Constants.EXTRA_ALBUM_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(albumCoverImageView));
 

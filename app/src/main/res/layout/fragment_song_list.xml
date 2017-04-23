@@ -10,4 +10,4 @@
     android:layout_marginRight="@dimen/standard_margin_large"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.screen_browse.songs.SongsFragment"
-    tools:listitem="@layout/fragment_song_list_item" />
+    tools:listitem="@layout/fragment_all_songs_list_item" />

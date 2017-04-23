@@ -30,7 +30,7 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.fragment_song_list_item, parent, false);
+                .inflate(R.layout.fragment_all_songs_list_item, parent, false);
         return new SongViewHolder(view);
     }
 

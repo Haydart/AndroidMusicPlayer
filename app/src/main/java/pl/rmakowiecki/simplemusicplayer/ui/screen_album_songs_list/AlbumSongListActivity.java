@@ -15,7 +15,7 @@ import pl.rmakowiecki.simplemusicplayer.Constants;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 
-public class AlbumSongsListActivity extends AppCompatActivity {
+public class AlbumSongListActivity extends AppCompatActivity {
 
     @BindView(R.id.album_detail_image_view) ImageView imageView;
     @BindView(R.id.fab) FloatingActionButton floatingActionButton;
@@ -29,6 +29,7 @@ public class AlbumSongsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_album_songs_list);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
         supportPostponeEnterTransition();
 
         Bundle extras = getIntent().getExtras();
@@ -56,5 +57,14 @@ public class AlbumSongsListActivity extends AppCompatActivity {
 
         floatingActionButton.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }

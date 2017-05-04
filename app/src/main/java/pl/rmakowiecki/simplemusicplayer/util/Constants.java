@@ -1,4 +1,4 @@
-package pl.rmakowiecki.simplemusicplayer;
+package pl.rmakowiecki.simplemusicplayer.util;
 
 public class Constants {
     public static final String EXTRA_ALBUM_MODEL = "album_model_extra";

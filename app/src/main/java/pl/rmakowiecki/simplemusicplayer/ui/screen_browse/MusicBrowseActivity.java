@@ -23,13 +23,13 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import pl.rmakowiecki.simplemusicplayer.Constants;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list.AlbumSongListActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
+import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
 import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.Audio.AudioColumns.ALBUM;
@@ -44,7 +44,7 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.appbar) AppBarLayout appBar;
     @BindView(R.id.container) ViewPager viewPager;
-    @BindView(R.id.tabs) TabLayout tabLayout;
+    @BindView(R.id.tab_layout) TabLayout tabLayout;
 
     private List<Song> songList;
     private List<Album> albumsList;

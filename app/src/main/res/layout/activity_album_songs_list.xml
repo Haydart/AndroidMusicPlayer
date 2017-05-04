@@ -70,6 +70,8 @@
                 android:layout_marginLeft="@dimen/album_song_list_header_details_margin_left"
                 android:layout_marginBottom="@dimen/standard_margin_medium"
                 android:paddingTop="@dimen/album_song_list_header_details_padding_top"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="1.5"
                 android:orientation="vertical">
 
                 <TextView

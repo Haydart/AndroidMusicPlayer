@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore.Audio.Albums;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -29,6 +30,7 @@ import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list.AlbumSongListActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlayActivity;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
 import static android.provider.BaseColumns._ID;
@@ -147,7 +149,9 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
 
     @Override
     public void onSongClicked(Song item) {
-        // TODO: 19/04/2017 implement
+        Intent intent = new Intent(this, MusicPlayActivity.class);
+        intent.putParcelableArrayListExtra("songs", (ArrayList<? extends Parcelable>) songList);
+        startActivity(intent);
     }
 
     @Override

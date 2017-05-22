@@ -2,7 +2,6 @@ package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -38,7 +37,7 @@ class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
             args.putParcelableArrayList(SongsFragment.SONGS, (ArrayList<Song>) songList);
         } else {
             result = AlbumsFragment.newInstance();
-            args.putParcelableArrayList(AlbumsFragment.ALBUMS, (ArrayList<? extends Parcelable>) albumList);
+            args.putParcelableArrayList(AlbumsFragment.ALBUMS, (ArrayList<Album>) albumList);
         }
         result.setArguments(args);
         return result;

@@ -64,8 +64,9 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
 
     private void managePermissionResponse(Boolean granted) {
         if (granted) {
-            getSongsList();
-            createAlbumsList();
+            retrieveSongsList();
+            retrieveAlbumsList();
+            matchSongsWithAlbums();
             viewPager.setAdapter(new BrowseScreenPagerAdapter(getSupportFragmentManager(), this, songList, albumsList));
             tabLayout.setupWithViewPager(viewPager);
         } else {
@@ -75,7 +76,7 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void getSongsList() {
+    private void retrieveSongsList() {
         songList = new ArrayList<>();
         ContentResolver musicResolver = getContentResolver();
         Cursor musicCursor = musicResolver.query(EXTERNAL_CONTENT_URI, null, null, null, null);
@@ -85,14 +86,16 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
             int idColumn = musicCursor.getColumnIndex(_ID);
             int artistColumn = musicCursor.getColumnIndex(ARTIST);
             int albumCoverColumn = musicCursor.getColumnIndex(ALBUM_ID);
+            int albumNameColumn = musicCursor.getColumnIndex(ALBUM);
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String songTitle = musicCursor.getString(titleColumn);
                 String songArtist = musicCursor.getString(artistColumn);
+                String songAlbum = musicCursor.getString(albumNameColumn);
                 long albumCoverId = musicCursor.getLong(albumCoverColumn);
                 Uri albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY);
                 Uri albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, albumCoverId);
-                songList.add(new Song(thisId, songTitle, songArtist, albumArtUri, 0));
+                songList.add(new Song(thisId, songTitle, songArtist, songAlbum, albumArtUri, 0));
             }
             while (musicCursor.moveToNext());
         }
@@ -100,7 +103,7 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
         Collections.sort(songList, (a, b) -> a.getTitle().compareTo(b.getTitle()));
     }
 
-    private void createAlbumsList() {
+    private void retrieveAlbumsList() {
         albumsList = new ArrayList<>();
         ContentResolver musicResolver = getContentResolver();
         String[] projection = new String[] { Albums._ID, Albums.ALBUM, Albums.ARTIST, Albums.ALBUM_ART, Albums.NUMBER_OF_SONGS };
@@ -117,12 +120,26 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
                 String artist = musicCursor.getString(artistColumn);
                 Uri albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY);
                 Uri albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, id);
-                albumsList.add(new Album(id, name, artist, null, albumArtUri));
+                albumsList.add(new Album(id, name, artist, new ArrayList<>(), albumArtUri));
             }
             while (musicCursor.moveToNext());
         }
         musicCursor.close();
         Collections.sort(albumsList, (a, b) -> a.getArtist().compareTo(b.getArtist()));
+    }
+
+    private void matchSongsWithAlbums() {
+        for (Song song : songList) {
+            addSongToAlbum(song);
+        }
+    }
+
+    private void addSongToAlbum(Song song) {
+        for (Album album : albumsList) {
+            if (album.getName().equals(song.getAlbumName())) {
+                album.getSongs().add(song);
+            }
+        }
     }
 
     @Override

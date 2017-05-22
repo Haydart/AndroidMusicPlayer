@@ -8,13 +8,16 @@ public final class Song implements Parcelable {
     private final long id;
     private final String title;
     private final String artist;
+    private final String albumName;
     private final Uri albumCoverUri;
     private final int durationMillis;
 
-    public Song(long id, String title, String artist, Uri albumCoverUri, int durationMillis) {
+    public Song(long id, String title, String artist, String albumName, Uri albumCoverUri, int durationMillis) {
         this.id = id;
+
         this.title = title;
         this.artist = artist;
+        this.albumName = albumName;
         this.albumCoverUri = albumCoverUri;
         this.durationMillis = durationMillis;
     }
@@ -23,6 +26,7 @@ public final class Song implements Parcelable {
         id = in.readLong();
         title = in.readString();
         artist = in.readString();
+        albumName = in.readString();
         albumCoverUri = in.readParcelable(Uri.class.getClassLoader());
         durationMillis = in.readInt();
     }
@@ -37,6 +41,10 @@ public final class Song implements Parcelable {
 
     public String getArtist() {
         return artist;
+    }
+
+    public String getAlbumName() {
+        return albumName;
     }
 
     public Uri getAlbumCoverUri() {
@@ -69,6 +77,7 @@ public final class Song implements Parcelable {
         dest.writeLong(id);
         dest.writeString(title);
         dest.writeString(artist);
+        dest.writeString(albumName);
         dest.writeParcelable(albumCoverUri, flags);
         dest.writeInt(durationMillis);
     }

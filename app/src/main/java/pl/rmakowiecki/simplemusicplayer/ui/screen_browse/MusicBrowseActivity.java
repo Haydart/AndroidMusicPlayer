@@ -35,6 +35,7 @@ import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.Audio.AudioColumns.ALBUM;
 import static android.provider.MediaStore.Audio.AudioColumns.ALBUM_ID;
 import static android.provider.MediaStore.Audio.AudioColumns.ARTIST;
+import static android.provider.MediaStore.Audio.AudioColumns.DURATION;
 import static android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 import static android.provider.MediaStore.MediaColumns.TITLE;
 
@@ -87,6 +88,7 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
             int artistColumn = musicCursor.getColumnIndex(ARTIST);
             int albumCoverColumn = musicCursor.getColumnIndex(ALBUM_ID);
             int albumNameColumn = musicCursor.getColumnIndex(ALBUM);
+            int durationColumn = musicCursor.getColumnIndex(DURATION);
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String songTitle = musicCursor.getString(titleColumn);
@@ -95,7 +97,8 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
                 long albumCoverId = musicCursor.getLong(albumCoverColumn);
                 Uri albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY);
                 Uri albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, albumCoverId);
-                songList.add(new Song(thisId, songTitle, songArtist, songAlbum, albumArtUri, 0));
+                long songDuration = musicCursor.getLong(durationColumn);
+                songList.add(new Song(thisId, songTitle, songArtist, songAlbum, albumArtUri, (int) songDuration));
             }
             while (musicCursor.moveToNext());
         }

@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -23,6 +26,8 @@ import com.squareup.picasso.Picasso;
 import java.util.concurrent.TimeUnit;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
+import pl.rmakowiecki.simplemusicplayer.model.Song;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
 import pl.rmakowiecki.simplemusicplayer.util.AnimationListenerAdapter;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 import pl.rmakowiecki.simplemusicplayer.util.TransitionListenerAdapter;
@@ -30,7 +35,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class AlbumSongListActivity extends AppCompatActivity {
+public class AlbumSongListActivity extends AppCompatActivity implements SongsFragment.SongClickListener {
 
     public static final int ALBUM_COVER_FRAME_ANIMATION_DELAY = 200;
     @BindView(R.id.album_detail_background_image_view) ImageView albumBackgroundImageView;
@@ -40,6 +45,7 @@ public class AlbumSongListActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.album_details_layout) LinearLayout albumDetailsLayout;
     @BindView(R.id.white_frame_background_view) View albumCoverFrame;
+    @BindView(R.id.albums_fragment_recycler_view) RecyclerView songListRecyclerView;
 
     private Album albumDataSource;
     private boolean isAlbumDetailsLayoutVisible = true;
@@ -69,6 +75,7 @@ public class AlbumSongListActivity extends AppCompatActivity {
         getAlbumDataFromExtras();
         loadHeaderBackground();
         loadAlbumCoverImage();
+        populateSongsRecyclerView();
     }
 
     private void setAlbumDetailsBehavior() {
@@ -115,12 +122,6 @@ public class AlbumSongListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        albumCoverFrame.setVisibility(View.INVISIBLE);
-    }
-
     @NonNull
     private void getAlbumDataFromExtras() {
         Bundle extras = getIntent().getExtras();
@@ -148,6 +149,17 @@ public class AlbumSongListActivity extends AppCompatActivity {
                 });
     }
 
+    private void populateSongsRecyclerView() {
+        songListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        songListRecyclerView.setAdapter(new AlbumSongsRecyclerViewAdapter(albumDataSource.getSongs(), this));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        albumCoverFrame.setVisibility(View.INVISIBLE);
+    }
+
     private void loadHeaderBackground() {
         Picasso.with(this)
                 .load(albumDataSource.getAlbumCoverUri())
@@ -166,5 +178,10 @@ public class AlbumSongListActivity extends AppCompatActivity {
                     albumCoverFrame.startAnimation(animation);
                     albumCoverFrame.setVisibility(View.VISIBLE);
                 });
+    }
+
+    @Override
+    public void onSongClicked(Song item) {
+        Toast.makeText(this, "Song clicked", Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,20 +1,18 @@
 package pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
+import butterknife.BindView;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseFragment;
 
 public class AlbumsFragment extends BaseFragment<AlbumsFragmentPresenter> implements AlbumsFragmentView {
+
+    @BindView(R.id.albums_fragment_recycler_view) RecyclerView albumsRecyclerView;
 
     private static final int COLUMN_COUNT = 2;
     public static final String ALBUMS = "albums";
@@ -29,22 +27,10 @@ public class AlbumsFragment extends BaseFragment<AlbumsFragmentPresenter> implem
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_album_list, container, false);
-
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new GridLayoutManager(context, COLUMN_COUNT));
-            List<Album> albumList = getArguments().getParcelableArrayList(ALBUMS);
-            recyclerView.setAdapter(new AlbumRecyclerViewAdapter(albumList, listener));
-        }
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void setupAlbumsList() {
+        albumsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), COLUMN_COUNT));
+        List<Album> albumList = getArguments().getParcelableArrayList(ALBUMS);
+        albumsRecyclerView.setAdapter(new AlbumRecyclerViewAdapter(albumList, listener));
     }
 
     @Override

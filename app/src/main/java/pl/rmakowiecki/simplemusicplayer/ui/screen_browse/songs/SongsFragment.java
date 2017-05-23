@@ -1,20 +1,19 @@
 package pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import butterknife.BindView;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
+import pl.rmakowiecki.simplemusicplayer.ui.base.BaseFragment;
+import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
-public class SongsFragment extends Fragment {
+public class SongsFragment extends BaseFragment<SongsFragmentPresenter> implements SongsFragmentView {
 
-    public static final String SONGS = "songs";
+    @BindView(R.id.songs_fragment_recycler_view) RecyclerView songsRecyclerView;
+
     private SongClickListener listener;
 
     public SongsFragment() {
@@ -26,15 +25,20 @@ public class SongsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_song_list, container, false);
-        if (view instanceof RecyclerView) {
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            List<Song> songs = getArguments().getParcelableArrayList(SONGS);
-            recyclerView.setAdapter(new SongRecyclerViewAdapter(songs, listener));
-        }
-        return view;
+    public void setupSongsList() {
+        songsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        List<Song> songsList = getArguments().getParcelableArrayList(Constants.EXTRA_SONGS_LIST);
+        songsRecyclerView.setAdapter(new SongRecyclerViewAdapter(songsList, listener));
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_song_list;
+    }
+
+    @Override
+    protected void initPresenter() {
+        presenter = new SongsFragmentPresenter();
     }
 
     @Override

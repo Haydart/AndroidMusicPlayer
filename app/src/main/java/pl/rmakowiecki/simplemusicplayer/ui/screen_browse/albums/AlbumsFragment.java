@@ -29,8 +29,8 @@ public class AlbumsFragment extends BaseFragment<AlbumsFragmentPresenter> implem
     @Override
     public void setupAlbumsList() {
         albumsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), COLUMN_COUNT));
-        List<Album> albumList = getArguments().getParcelableArrayList(ALBUMS);
-        albumsRecyclerView.setAdapter(new AlbumRecyclerViewAdapter(albumList, listener));
+        List<Album> albumsList = getArguments().getParcelableArrayList(ALBUMS);
+        albumsRecyclerView.setAdapter(new AlbumRecyclerViewAdapter(albumsList, listener));
     }
 
     @Override

@@ -7,11 +7,11 @@ import rx.schedulers.Schedulers;
 public abstract class BasePresenter<V extends BaseView> {
     protected V view;
 
-    protected void onViewCreated(V view) {
+    protected void onViewInit(V view) {
         this.view = view;
     }
 
-    protected void onViewDestroyed() {
+    protected void onViewDestroy() {
         view = null;
     }
 

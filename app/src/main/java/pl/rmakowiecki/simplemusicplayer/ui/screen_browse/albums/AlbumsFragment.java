@@ -2,7 +2,7 @@ package pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,8 +12,9 @@ import android.widget.ImageView;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
+import pl.rmakowiecki.simplemusicplayer.ui.base.BaseFragment;
 
-public class AlbumsFragment extends Fragment {
+public class AlbumsFragment extends BaseFragment<AlbumsFragmentPresenter> implements AlbumsFragmentView {
 
     private static final int COLUMN_COUNT = 2;
     public static final String ALBUMS = "albums";
@@ -39,6 +40,21 @@ public class AlbumsFragment extends Fragment {
             recyclerView.setAdapter(new AlbumRecyclerViewAdapter(albumList, listener));
         }
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_album_list;
+    }
+
+    @Override
+    protected void initPresenter() {
+        presenter = new AlbumsFragmentPresenter();
     }
 
     @Override

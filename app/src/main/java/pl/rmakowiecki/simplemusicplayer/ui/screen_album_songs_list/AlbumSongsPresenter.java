@@ -9,8 +9,8 @@ class AlbumSongsPresenter extends BasePresenter<AlbumSongsView> {
     private boolean isAlbumDetailsLayoutVisible = false;
 
     @Override
-    protected void onViewCreated(AlbumSongsView view) {
-        super.onViewCreated(view);
+    protected void onViewInit(AlbumSongsView view) {
+        super.onViewInit(view);
         view.loadHeaderBackground();
         view.loadAlbumCoverImage();
         view.populateSongsList();

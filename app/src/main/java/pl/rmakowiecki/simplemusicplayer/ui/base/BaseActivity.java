@@ -13,7 +13,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         setContentView(getLayoutResId());
         bindViews();
         initPresenter();
-        presenter.onViewCreated(this);
+        presenter.onViewInit(this);
     }
 
     private void bindViews() {
@@ -23,7 +23,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @Override
     protected void onDestroy() {
-        presenter.onViewDestroyed();
+        presenter.onViewDestroy();
         presenter = null;
         super.onDestroy();
     }

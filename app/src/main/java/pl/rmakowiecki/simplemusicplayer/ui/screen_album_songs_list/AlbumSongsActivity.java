@@ -56,9 +56,15 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
         getAlbumDataFromExtras();
         setupAppBar();
         supportPostponeEnterTransition();
+        setupHeaderScrollListener();
+        setupSharedTransitionStartListener();
+    }
 
+    private void setupHeaderScrollListener() {
         appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> presenter.onHeaderOffsetChanged(verticalOffset));
+    }
 
+    private void setupSharedTransitionStartListener() {
         Transition sharedElementEnterTransition = getWindow().getSharedElementEnterTransition();
         sharedElementEnterTransition.addListener(new TransitionListenerAdapter() {
             @Override

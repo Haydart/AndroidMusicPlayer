@@ -7,9 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView {
 
+    private Unbinder unbinder;
     protected P presenter;
 
     @Override
@@ -21,22 +24,22 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutRes(), container, false);
+        View view = inflater.inflate(getLayoutRes(), container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        presenter.onViewCreated(this);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        presenter.onViewInit(this);
     }
 
     @Override
-    public void onStop() {
-        if (presenter != null) {
-            presenter.onViewDestroyed();
-        }
-
-        super.onStop();
+    public void onDestroyView() {
+        presenter.onViewDestroy();
+        unbinder.unbind();
+        super.onDestroyView();
     }
 
     @Override

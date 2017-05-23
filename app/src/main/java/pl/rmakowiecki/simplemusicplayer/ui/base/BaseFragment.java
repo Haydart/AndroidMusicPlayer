@@ -27,13 +27,13 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Override
     public void onStart() {
         super.onStart();
-        presenter.onViewStarted(this);
+        presenter.onViewCreated(this);
     }
 
     @Override
     public void onStop() {
         if (presenter != null) {
-            presenter.onViewStopped();
+            presenter.onViewDestroyed();
         }
 
         super.onStop();

@@ -15,13 +15,13 @@ import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment.SongClickListener;
 
-public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerViewAdapter.SongViewHolder> {
+class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerViewAdapter.SongViewHolder> {
 
     private final List<Song> dataSource;
     private final SongClickListener listener;
     private Context context;
 
-    public SongRecyclerViewAdapter(List<Song> dataSource, SongClickListener listener) {
+    SongRecyclerViewAdapter(List<Song> dataSource, SongClickListener listener) {
         this.dataSource = dataSource;
         this.listener = listener;
     }
@@ -61,7 +61,7 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
             artistTextView.setText(song.getArtist());
             view.setOnClickListener(v -> {
                 if (null != listener) {
-                    listener.onSongClicked(song);
+                    listener.onSongClicked(song, getAdapterPosition());
                 }
             });
             Picasso.with(context)

@@ -54,6 +54,6 @@ public class SongsFragment extends Fragment {
     }
 
     public interface SongClickListener {
-        void onSongClicked(Song item);
+        void onSongClicked(Song adapterPosition, int item);
     }
 }

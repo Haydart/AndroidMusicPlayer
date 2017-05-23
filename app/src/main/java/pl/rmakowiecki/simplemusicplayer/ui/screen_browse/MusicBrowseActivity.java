@@ -27,7 +27,7 @@ import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list.AlbumSongListActivity;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list.AlbumSongsActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlayActivity;
@@ -148,15 +148,15 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
     }
 
     @Override
-    public void onSongClicked(Song item) {
+    public void onSongClicked(Song adapterPosition, int item) {
         Intent intent = new Intent(this, MusicPlayActivity.class);
-        intent.putParcelableArrayListExtra("songs", (ArrayList<? extends Parcelable>) songList);
+        intent.putParcelableArrayListExtra(Constants.EXTRA_SONGS_LIST, (ArrayList<? extends Parcelable>) songList);
         startActivity(intent);
     }
 
     @Override
     public void onAlbumClicked(int adapterPosition, Album album, ImageView albumCoverImageView) {
-        Intent intent = new Intent(this, AlbumSongListActivity.class);
+        Intent intent = new Intent(this, AlbumSongsActivity.class);
         intent.putExtra(Constants.EXTRA_ALBUM_MODEL, album);
         intent.putExtra(Constants.EXTRA_ALBUM_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(albumCoverImageView));
 

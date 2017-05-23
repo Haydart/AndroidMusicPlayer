@@ -13,31 +13,17 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         setContentView(getLayoutResId());
         bindViews();
         initPresenter();
+        presenter.onViewCreated(this);
     }
 
     private void bindViews() {
         ButterKnife.bind(this);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (presenter != null) {
-            presenter.onViewStarted(this);
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        if (presenter != null) {
-            presenter.onViewStopped();
-        }
-        super.onStop();
-    }
 
     @Override
     protected void onDestroy() {
+        presenter.onViewDestroyed();
         presenter = null;
         super.onDestroy();
     }

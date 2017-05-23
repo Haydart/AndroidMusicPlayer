@@ -7,15 +7,13 @@ import rx.schedulers.Schedulers;
 public abstract class BasePresenter<V extends BaseView> {
     protected V view;
 
-    protected void onViewStarted(V view) {
+    protected void onViewCreated(V view) {
         this.view = view;
     }
 
-    protected void onViewStopped() {
-        view = getNoOpView();
+    protected void onViewDestroyed() {
+        view = null;
     }
-
-    public abstract V getNoOpView();
 
     protected <T> Observable.Transformer<T, T> applySchedulers() {
         return observable -> observable

@@ -16,6 +16,7 @@ import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.background.MusicPlayerService;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
+import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
 public class MusicPlayActivity extends AppCompatActivity {
 
@@ -55,7 +56,7 @@ public class MusicPlayActivity extends AppCompatActivity {
     }
 
     private void retrieveSongsPlaylist() {
-        songPlaybackList = getIntent().getParcelableArrayListExtra("songs");
+        songPlaybackList = getIntent().getParcelableArrayListExtra(Constants.EXTRA_SONGS_LIST);
     }
 
     private void initMusicPlaybackServiceConnection() {

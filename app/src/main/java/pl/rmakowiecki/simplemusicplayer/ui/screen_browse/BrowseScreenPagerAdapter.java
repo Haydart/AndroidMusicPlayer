@@ -12,6 +12,7 @@ import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
+import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
 class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
     private static final String PAGE_POSITION = "page_position";
@@ -19,7 +20,7 @@ class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
     private List<Song> songList;
     private final List<Album> albumList;
 
-    public BrowseScreenPagerAdapter(FragmentManager fragmentManager, Context context, List<Song> songList, List<Album> albumList) {
+    BrowseScreenPagerAdapter(FragmentManager fragmentManager, Context context, List<Song> songList, List<Album> albumList) {
         super(fragmentManager);
         this.context = context;
         this.songList = songList;
@@ -34,10 +35,10 @@ class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
 
         if (position == 0) {
             result = SongsFragment.newInstance();
-            args.putParcelableArrayList(SongsFragment.SONGS, (ArrayList<Song>) songList);
+            args.putParcelableArrayList(Constants.EXTRA_SONG_MODEL, (ArrayList<Song>) songList);
         } else {
             result = AlbumsFragment.newInstance();
-            args.putParcelableArrayList(AlbumsFragment.ALBUMS, (ArrayList<Album>) albumList);
+            args.putParcelableArrayList(Constants.EXTRA_ALBUM_MODEL, (ArrayList<Album>) albumList);
         }
         result.setArguments(args);
         return result;

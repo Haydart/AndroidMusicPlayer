@@ -9,13 +9,13 @@ import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseFragment;
+import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
 public class AlbumsFragment extends BaseFragment<AlbumsFragmentPresenter> implements AlbumsFragmentView {
 
     @BindView(R.id.albums_fragment_recycler_view) RecyclerView albumsRecyclerView;
 
     private static final int COLUMN_COUNT = 2;
-    public static final String ALBUMS = "albums";
     private AlbumClickListener listener;
 
     public AlbumsFragment() {
@@ -29,7 +29,7 @@ public class AlbumsFragment extends BaseFragment<AlbumsFragmentPresenter> implem
     @Override
     public void setupAlbumsList() {
         albumsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), COLUMN_COUNT));
-        List<Album> albumsList = getArguments().getParcelableArrayList(ALBUMS);
+        List<Album> albumsList = getArguments().getParcelableArrayList(Constants.EXTRA_ALBUM_MODEL);
         albumsRecyclerView.setAdapter(new AlbumRecyclerViewAdapter(albumsList, listener));
     }
 

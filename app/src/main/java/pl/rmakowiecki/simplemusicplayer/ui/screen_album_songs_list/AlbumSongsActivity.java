@@ -53,11 +53,11 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getAlbumDataFromExtras();
-        setupAppBar();
         supportPostponeEnterTransition();
-        setupHeaderScrollListener();
         setupSharedTransitionStartListener();
+        getAlbumDataFromExtras();
+        setupHeaderScrollListener();
+        setupAppBar();
     }
 
     private void setupHeaderScrollListener() {
@@ -174,7 +174,7 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
     @Override
     public void launchMusicPlaybackScreen(List<Song> songDataSource, int position) {
         Intent intent = new Intent(this, MusicPlayActivity.class);
-        intent.putParcelableArrayListExtra(Constants.EXTRA_SONGS_LIST, (ArrayList<? extends Parcelable>) albumDataSource.getSongs());
+        intent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) albumDataSource.getSongs());
         startActivity(intent);
     }
 

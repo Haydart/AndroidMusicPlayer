@@ -150,7 +150,7 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
     @Override
     public void onSongClicked(Song adapterPosition, int item) {
         Intent intent = new Intent(this, MusicPlayActivity.class);
-        intent.putParcelableArrayListExtra(Constants.EXTRA_SONGS_LIST, (ArrayList<? extends Parcelable>) songList);
+        intent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) songList);
         startActivity(intent);
     }
 

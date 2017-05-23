@@ -13,13 +13,13 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         setContentView(getLayoutResId());
         bindViews();
         initPresenter();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         presenter.onViewInit(this);
     }
-
-    private void bindViews() {
-        ButterKnife.bind(this);
-    }
-
 
     @Override
     protected void onDestroy() {
@@ -28,6 +28,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         super.onDestroy();
     }
 
+
     @Override
     public void onBackPressed() {
         if (shouldMoveToBack()) {
@@ -35,6 +36,10 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         } else {
             moveTaskToBack(true);
         }
+    }
+
+    private void bindViews() {
+        ButterKnife.bind(this);
     }
 
     protected abstract void initPresenter();

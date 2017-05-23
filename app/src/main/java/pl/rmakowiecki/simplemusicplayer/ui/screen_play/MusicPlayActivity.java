@@ -56,7 +56,7 @@ public class MusicPlayActivity extends AppCompatActivity {
     }
 
     private void retrieveSongsPlaylist() {
-        songPlaybackList = getIntent().getParcelableArrayListExtra(Constants.EXTRA_SONGS_LIST);
+        songPlaybackList = getIntent().getParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL);
     }
 
     private void initMusicPlaybackServiceConnection() {

@@ -30,7 +30,7 @@ class AlbumGridRecyclerViewAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         switch (viewType) {
             case HEADER:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.fragment_header_list_item, parent, false);
+                        .inflate(R.layout.fragment_album_header_list_item, parent, false);
                 viewHolder = new HeaderViewHolder(view);
                 break;
             default:

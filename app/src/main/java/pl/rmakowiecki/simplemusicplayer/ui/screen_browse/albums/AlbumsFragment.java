@@ -9,6 +9,7 @@ import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.DataModel;
+import pl.rmakowiecki.simplemusicplayer.model.ListSectionHeader;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseViewHolder;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
@@ -32,12 +33,12 @@ public class AlbumsFragment extends BaseFragment<AlbumsFragmentPresenter> implem
     @Override
     public void setupAlbumsList() {
         albumsList = getArguments().getParcelableArrayList(Constants.EXTRA_ALBUM_MODEL);
-        addHeadersToAlbumsList();
+        addAlbumArtistHeaders();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), COLUMN_COUNT);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                return 1;
+                return albumsList.get(position) instanceof Album ? 1 : 2;
             }
         });
         albumsRecyclerView.setLayoutManager(gridLayoutManager);
@@ -54,8 +55,15 @@ public class AlbumsFragment extends BaseFragment<AlbumsFragmentPresenter> implem
         }));
     }
 
-    private void addHeadersToAlbumsList() {
-
+    private void addAlbumArtistHeaders() {
+        String previousAlbumArtist = "";
+        for (int i = 0; i < albumsList.size(); i++) {
+            String currentAlbumArtist = ((Album) albumsList.get(i)).getArtist();
+            if (!currentAlbumArtist.equals(previousAlbumArtist)) {
+                albumsList.add(i, new ListSectionHeader(currentAlbumArtist));
+                previousAlbumArtist = currentAlbumArtist;
+            }
+        }
     }
 
     @Override

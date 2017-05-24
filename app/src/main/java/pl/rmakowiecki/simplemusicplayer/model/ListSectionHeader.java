@@ -6,6 +6,10 @@ import android.os.Parcelable;
 public final class ListSectionHeader extends DataModel implements Parcelable {
     private final String headerText;
 
+    public String getHeaderext() {
+        return headerText;
+    }
+
     public ListSectionHeader(String headerText) {
         this.headerText = headerText;
     }

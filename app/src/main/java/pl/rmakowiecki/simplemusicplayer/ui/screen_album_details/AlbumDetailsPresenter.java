@@ -1,15 +1,15 @@
-package pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list;
+package pl.rmakowiecki.simplemusicplayer.ui.screen_album_details;
 
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BasePresenter;
 
-class AlbumSongsPresenter extends BasePresenter<AlbumSongsView> {
+class AlbumDetailsPresenter extends BasePresenter<AlbumDetailsView> {
 
     private boolean isAlbumDetailsLayoutVisible = false;
 
     @Override
-    protected void onViewInit(AlbumSongsView view) {
+    protected void onViewInit(AlbumDetailsView view) {
         super.onViewInit(view);
         view.loadHeaderBackground();
         view.loadAlbumCoverImage();

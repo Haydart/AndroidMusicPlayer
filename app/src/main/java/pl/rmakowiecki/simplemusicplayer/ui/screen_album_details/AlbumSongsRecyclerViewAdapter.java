@@ -1,4 +1,4 @@
-package pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list;
+package pl.rmakowiecki.simplemusicplayer.ui.screen_album_details;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

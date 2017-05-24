@@ -1,4 +1,4 @@
-package pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list;
+package pl.rmakowiecki.simplemusicplayer.ui.screen_album_details;
 
 import android.content.Intent;
 import android.os.Build;
@@ -36,7 +36,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implements AlbumSongsView, SongsFragment.SongClickListener {
+public class AlbumDetailsActivity extends BaseActivity<AlbumDetailsPresenter> implements AlbumDetailsView, SongsFragment.SongClickListener {
 
     public static final int ALBUM_COVER_FRAME_ANIMATION_DELAY = 200;
     @BindView(R.id.album_detail_background_image_view) ImageView albumBackgroundImageView;
@@ -55,9 +55,18 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
         super.onCreate(savedInstanceState);
         supportPostponeEnterTransition();
         setupSharedTransitionStartListener();
-        getAlbumDataFromExtras();
         setupHeaderScrollListener();
         setupAppBar();
+    }
+
+    @Override
+    protected void initPresenter() {
+        presenter = new AlbumDetailsPresenter();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_album_songs_list;
     }
 
     private void setupHeaderScrollListener() {
@@ -75,15 +84,6 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
         });
     }
 
-    private void getAlbumDataFromExtras() {
-        Bundle extras = getIntent().getExtras();
-        albumDataSource = extras.getParcelable(Constants.EXTRA_ALBUM_MODEL);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String imageTransitionName = extras.getString(Constants.EXTRA_ALBUM_IMAGE_TRANSITION_NAME);
-            albumImageView.setTransitionName(imageTransitionName);
-        }
-    }
-
     private void setupAppBar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -96,7 +96,7 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
 
     @Override
     public void fadeOutAlbumDetails() {
-        Animation animation = AnimationUtils.loadAnimation(AlbumSongsActivity.this, R.anim.fade_out);
+        Animation animation = AnimationUtils.loadAnimation(AlbumDetailsActivity.this, R.anim.fade_out);
         animation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -108,7 +108,7 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
 
     @Override
     public void fadeInAlbumDetails() {
-        Animation animation = AnimationUtils.loadAnimation(AlbumSongsActivity.this, R.anim.fade_out);
+        Animation animation = AnimationUtils.loadAnimation(AlbumDetailsActivity.this, R.anim.fade_out);
         animation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -143,16 +143,6 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
     }
 
     @Override
-    protected void initPresenter() {
-        presenter = new AlbumSongsPresenter();
-    }
-
-    @Override
-    protected int getLayoutResId() {
-        return R.layout.activity_album_songs_list;
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         presenter.onBackButtonClicked();
@@ -160,10 +150,20 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
 
     @Override
     public void loadHeaderBackground() {
+        getAlbumDataFromExtras();
         Picasso.with(this)
                 .load(albumDataSource.getAlbumCoverUri())
                 .noFade()
                 .into(albumBackgroundImageView);
+    }
+
+    private void getAlbumDataFromExtras() {
+        Bundle extras = getIntent().getExtras();
+        albumDataSource = extras.getParcelable(Constants.EXTRA_ALBUM_MODEL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String imageTransitionName = extras.getString(Constants.EXTRA_ALBUM_IMAGE_TRANSITION_NAME);
+            albumImageView.setTransitionName(imageTransitionName);
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@
             android:name=".ui.screen_play.MusicPlayActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.screen_album_songs_list.AlbumSongsActivity"
+            android:name=".ui.screen_album_details.AlbumDetailsActivity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.screen_browse.MusicBrowseActivity" />
 

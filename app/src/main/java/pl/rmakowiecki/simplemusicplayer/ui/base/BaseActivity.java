@@ -13,12 +13,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         setContentView(getLayoutResId());
         bindViews();
         initPresenter();
+        presenter.onViewInit(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.onViewInit(this);
     }
 
     @Override

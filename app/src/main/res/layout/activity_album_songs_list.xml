@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list.AlbumSongsActivity">
+    tools:context="pl.rmakowiecki.simplemusicplayer.ui.screen_album_details.AlbumDetailsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -108,7 +108,7 @@
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".ui.screen_album_songs_list.AlbumSongsActivity"
+        tools:context=".ui.screen_album_details.AlbumDetailsActivity"
         tools:listitem="@layout/album_songs_list_item" />
 
     <android.support.design.widget.FloatingActionButton

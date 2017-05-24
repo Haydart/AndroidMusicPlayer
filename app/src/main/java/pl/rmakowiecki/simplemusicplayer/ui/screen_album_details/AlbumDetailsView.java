@@ -1,10 +1,10 @@
-package pl.rmakowiecki.simplemusicplayer.ui.screen_album_songs_list;
+package pl.rmakowiecki.simplemusicplayer.ui.screen_album_details;
 
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseView;
 
-interface AlbumSongsView extends BaseView {
+interface AlbumDetailsView extends BaseView {
     void fadeOutAlbumDetails();
 
     void fadeInAlbumDetails();

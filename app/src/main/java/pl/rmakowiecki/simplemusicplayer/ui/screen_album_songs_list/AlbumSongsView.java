@@ -11,7 +11,7 @@ interface AlbumSongsView extends BaseView {
 
     void loadAlbumCoverImage();
 
-    void populateSongsList();
+    void setupSongsList();
 
     void loadHeaderBackground();
 

@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public final class Song implements Parcelable {
+public final class Song extends DataModel implements Parcelable {
     private final long id;
     private final String title;
     private final String artist;

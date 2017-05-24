@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.List;
 
-public class Album implements Parcelable {
+public final class Album extends DataModel implements Parcelable {
     private final long id;
     private final String name;
     private final String artist;

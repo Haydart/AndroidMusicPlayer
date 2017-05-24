@@ -16,7 +16,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +41,7 @@ import static android.provider.MediaStore.Audio.AudioColumns.DURATION;
 import static android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 import static android.provider.MediaStore.MediaColumns.TITLE;
 
-public class MusicBrowseActivity extends AppCompatActivity implements SongsFragment.SongClickListener, AlbumsFragment.AlbumClickListener {
+public class MusicBrowseActivity extends AppCompatActivity implements SongsFragment.SongClickListener, AlbumsFragment.AlbumCoverClickListener {
 
     public static final String ALBUM_COVER_DIRECTORY = "content://media/external/audio/albumart";
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -155,7 +155,7 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
     }
 
     @Override
-    public void onAlbumClicked(int adapterPosition, Album album, ImageView albumCoverImageView) {
+    public void onAlbumClicked(Album album, int adapterPosition, View albumCoverImageView) {
         Intent intent = new Intent(this, AlbumSongsActivity.class);
         intent.putExtra(Constants.EXTRA_ALBUM_MODEL, album);
         intent.putExtra(Constants.EXTRA_ALBUM_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(albumCoverImageView));
@@ -164,7 +164,6 @@ public class MusicBrowseActivity extends AppCompatActivity implements SongsFragm
                 this,
                 albumCoverImageView,
                 ViewCompat.getTransitionName(albumCoverImageView));
-
         startActivity(intent, options.toBundle());
     }
 }

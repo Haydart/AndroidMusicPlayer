@@ -5,23 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import com.squareup.picasso.Picasso;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment.SongClickListener;
+import pl.rmakowiecki.simplemusicplayer.ui.base.BaseViewHolder;
 
-class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerViewAdapter.SongViewHolder> {
+class SongRecyclerViewAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private final List<Song> dataSource;
-    private final SongClickListener listener;
+    private final BaseViewHolder.ListItemListener<Song> listener;
     private Context context;
 
-    SongRecyclerViewAdapter(List<Song> dataSource, SongClickListener listener) {
+    SongRecyclerViewAdapter(List<Song> dataSource, BaseViewHolder.ListItemListener<Song> listener) {
         this.dataSource = dataSource;
         this.listener = listener;
     }
@@ -31,49 +26,16 @@ class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerViewAdapt
         this.context = parent.getContext();
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.fragment_all_songs_list_item, parent, false);
-        return new SongViewHolder(view);
+        return new SongViewHolder(view, listener);
     }
 
     @Override
-    public void onBindViewHolder(final SongViewHolder holder, int position) {
+    public void onBindViewHolder(BaseViewHolder holder, int position) {
         holder.bindView(dataSource.get(position));
     }
 
     @Override
     public int getItemCount() {
         return dataSource.size();
-    }
-
-    class SongViewHolder extends RecyclerView.ViewHolder {
-        private final View view;
-        @BindView(R.id.title_text_view) TextView titleTextView;
-        @BindView(R.id.artist_text_view) TextView artistTextView;
-        @BindView(R.id.album_cover_image) ImageView albumCoverImageView;
-
-        SongViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-            this.view = view;
-        }
-
-        void bindView(Song song) {
-            titleTextView.setText(song.getTitle());
-            artistTextView.setText(song.getArtist());
-            view.setOnClickListener(v -> {
-                if (null != listener) {
-                    listener.onSongClicked(song, getAdapterPosition());
-                }
-            });
-            Picasso.with(context)
-                    .load(song.getAlbumCoverUri())
-                    .placeholder(R.drawable.placeholder_album_cover)
-                    .error(R.drawable.placeholder_album_cover)
-                    .into(albumCoverImageView);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + artistTextView.getText() + "'";
-        }
     }
 }

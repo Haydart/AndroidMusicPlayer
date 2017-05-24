@@ -13,7 +13,7 @@ class AlbumSongsPresenter extends BasePresenter<AlbumSongsView> {
         super.onViewInit(view);
         view.loadHeaderBackground();
         view.loadAlbumCoverImage();
-        view.populateSongsList();
+        view.setupSongsList();
     }
 
     void onListItemClicked(List<Song> songDataSource, int position) {

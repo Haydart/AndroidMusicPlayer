@@ -137,7 +137,7 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
     }
 
     @Override
-    public void populateSongsList() {
+    public void setupSongsList() {
         songListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         songListRecyclerView.setAdapter(new AlbumSongsRecyclerViewAdapter(albumDataSource.getSongs(), this));
     }
@@ -167,11 +167,6 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
     }
 
     @Override
-    public void onSongClicked(Song songData, int position) {
-        presenter.onListItemClicked(albumDataSource.getSongs(), position);
-    }
-
-    @Override
     public void launchMusicPlaybackScreen(List<Song> songDataSource, int position) {
         Intent intent = new Intent(this, MusicPlayActivity.class);
         intent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) albumDataSource.getSongs());
@@ -195,5 +190,10 @@ public class AlbumSongsActivity extends BaseActivity<AlbumSongsPresenter> implem
     @Override
     public void hideHeaderAlbumCoverFrame() {
         albumCoverFrame.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onSongClicked(Song ignoredDataModel, int adapterPosition) {
+        presenter.onListItemClicked(albumDataSource.getSongs(), adapterPosition);
     }
 }

@@ -170,6 +170,7 @@ public class AlbumDetailsActivity extends BaseActivity<AlbumDetailsPresenter> im
     public void launchMusicPlaybackScreen(List<Song> songDataSource, int position) {
         Intent intent = new Intent(this, MusicPlayActivity.class);
         intent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) albumDataSource.getSongs());
+        intent.putExtra(Constants.EXTRA_CURRENT_SONG_POSITION, position);
         startActivity(intent);
     }
 

@@ -28,10 +28,11 @@ public class MusicPlayActivity extends AppCompatActivity {
     private boolean musicBound = false;
     private ServiceConnection musicServiceConnection;
     private List<Song> songPlaybackList;
+    private int currentSongIndex;
 
     @OnClick(R.id.play_button)
     public void onPlayButtonClicked() {
-        musicPlayerService.setCurrentSong(0);
+        musicPlayerService.setCurrentSong(currentSongIndex);
         musicPlayerService.playCurrentSong();
     }
 
@@ -56,7 +57,9 @@ public class MusicPlayActivity extends AppCompatActivity {
     }
 
     private void retrieveSongsPlaylist() {
-        songPlaybackList = getIntent().getParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL);
+        Intent intent = getIntent();
+        songPlaybackList = intent.getParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL);
+        currentSongIndex = intent.getIntExtra(Constants.EXTRA_CURRENT_SONG_POSITION, 0);
     }
 
     private void initMusicPlaybackServiceConnection() {

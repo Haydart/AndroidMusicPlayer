@@ -27,7 +27,7 @@ import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseActivity;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
+import pl.rmakowiecki.simplemusicplayer.ui.base.BaseViewHolder;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlayActivity;
 import pl.rmakowiecki.simplemusicplayer.util.AnimationListenerAdapter;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
@@ -36,7 +36,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class AlbumDetailsActivity extends BaseActivity<AlbumDetailsPresenter> implements AlbumDetailsView, SongsFragment.SongClickListener {
+public class AlbumDetailsActivity extends BaseActivity<AlbumDetailsPresenter> implements AlbumDetailsView, BaseViewHolder.ListItemListener<Song> {
 
     public static final int ALBUM_COVER_FRAME_ANIMATION_DELAY = 200;
     @BindView(R.id.album_detail_background_image_view) ImageView albumBackgroundImageView;
@@ -193,7 +193,7 @@ public class AlbumDetailsActivity extends BaseActivity<AlbumDetailsPresenter> im
     }
 
     @Override
-    public void onSongClicked(Song ignoredDataModel, int adapterPosition) {
+    public void onListItemClicked(Song modelData, int adapterPosition) {
         presenter.onListItemClicked(albumDataSource.getSongs(), adapterPosition);
     }
 }

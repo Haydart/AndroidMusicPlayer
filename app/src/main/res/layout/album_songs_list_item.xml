@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/songs_list_row_height"
     tools:layout_editor_absoluteY="0dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:layout_editor_absoluteX="0dp"
+    android:background="?attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/album_song_title_text_view"

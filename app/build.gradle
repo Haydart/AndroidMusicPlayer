@@ -50,6 +50,7 @@ dependencies {
 	compile 'io.reactivex:rxjava:1.2.1'
 	compile 'com.artemzin.rxjava:proguard-rules:1.2.1.0'
 	compile 'com.jakewharton:butterknife:8.5.1'
+	compile 'com.github.andremion:musiccoverview:1.0.0'
 	compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
 	testCompile 'junit:junit:4.12'
 	annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'

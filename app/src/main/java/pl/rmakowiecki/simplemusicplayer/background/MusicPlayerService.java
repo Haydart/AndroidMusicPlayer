@@ -85,9 +85,14 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
 
     @Override
     public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onDestroy() {
         player.stop();
         player.release();
-        return super.onUnbind(intent);
+        super.onDestroy();
     }
 
     public class MusicBinder extends Binder {

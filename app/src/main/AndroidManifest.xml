@@ -32,6 +32,10 @@
             android:parentActivityName=".ui.screen_browse.MusicBrowseActivity" />
 
         <service android:name=".background.MusicPlayerService" />
+        <service
+            android:name=".background.OnClearFromRecentService"
+            android:stopWithTask="false" />
+
     </application>
 
 </manifest>

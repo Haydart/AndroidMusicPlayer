@@ -2,6 +2,7 @@ package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
 
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BasePresenter;
+import pl.rmakowiecki.simplemusicplayer.ui.widget.ViewWrapper;
 
 class MusicBrowsePresenter extends BasePresenter<MusicBrowseView> {
 

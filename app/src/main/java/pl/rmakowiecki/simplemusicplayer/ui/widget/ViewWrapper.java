@@ -1,11 +1,11 @@
-package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
+package pl.rmakowiecki.simplemusicplayer.ui.widget;
 
 import android.view.View;
 
 public final class ViewWrapper {
     private final View view;
 
-    ViewWrapper(View view) {
+    public ViewWrapper(View view) {
         this.view = view;
     }
 

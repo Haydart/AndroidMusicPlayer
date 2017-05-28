@@ -2,6 +2,7 @@ package pl.rmakowiecki.simplemusicplayer.ui.screen_browse;
 
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseView;
+import pl.rmakowiecki.simplemusicplayer.ui.widget.ViewWrapper;
 
 interface MusicBrowseView extends BaseView {
 

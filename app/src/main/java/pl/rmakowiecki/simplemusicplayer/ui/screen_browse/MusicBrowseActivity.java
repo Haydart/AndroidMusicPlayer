@@ -26,6 +26,7 @@ import pl.rmakowiecki.simplemusicplayer.ui.screen_album_details.AlbumDetailsActi
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlayActivity;
+import pl.rmakowiecki.simplemusicplayer.ui.widget.ViewWrapper;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
 public class MusicBrowseActivity extends BaseActivity<MusicBrowsePresenter> implements MusicBrowseView, SongsFragment.SongClickListener, AlbumsFragment.AlbumCoverClickListener {

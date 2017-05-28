@@ -1,5 +1,6 @@
 package pl.rmakowiecki.simplemusicplayer.ui.screen_play;
 
+import android.animation.ValueAnimator;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ViewGroup;
 import android.widget.MediaController.MediaPlayerControl;
-import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -20,6 +21,7 @@ import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.background.MusicPlayerService;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
+import pl.rmakowiecki.simplemusicplayer.ui.widget.MorphingProgressView;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
 public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerControl {
@@ -27,9 +29,7 @@ public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerC
     public static final int ALBUM_COVER_IMAGE_SIZE = 1024;
 
     @BindView(R.id.album_cover_view) MusicCoverView albumCoverView;
-    //@BindView(R.id.ken_burns_background_image) KenBurnsView backgroundAnimatedAlbumCoverView;
-
-    @BindColor(R.color.colorAccent) int accentColor;
+    @BindView(R.id.morping_progress_view) MorphingProgressView morphingProgressView;
 
     private MusicPlayerService musicPlayerService;
     private Intent musicPlayIntent;
@@ -56,17 +56,10 @@ public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerC
                 .load(songPlaybackList.get(currentSongIndex).getAlbumCoverUri())
                 .noFade()
                 .resize(ALBUM_COVER_IMAGE_SIZE, ALBUM_COVER_IMAGE_SIZE)
-                .centerInside()
                 .into(albumCoverView);
 
-        /*List<Transformation> backgroundImageTransformations = new ArrayList<>(5);
-        backgroundImageTransformations.add(new KuwaharaFilterTransformation(this, 16));
-        backgroundImageTransformations.add(new GrayscaleTransformation());
-
-        Picasso.with(this)
-                .load(songPlaybackList.get(currentSongIndex).getAlbumCoverUri())
-                .transform(backgroundImageTransformations)
-                .into(backgroundAnimatedAlbumCoverView);*/
+        morphingProgressView.setProgress(75);
+        morphingProgressView.setMorph(1);
     }
 
     @Override
@@ -84,6 +77,15 @@ public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerC
                 if (MusicCoverView.SHAPE_CIRCLE == coverView.getShape()) {
                     coverView.start();
                 }
+                ValueAnimator anim = ValueAnimator.ofInt(morphingProgressView.getMeasuredHeight(), -100);
+                anim.addUpdateListener(valueAnimator -> {
+                    int val = (Integer) valueAnimator.getAnimatedValue();
+                    ViewGroup.LayoutParams layoutParams = morphingProgressView.getLayoutParams();
+                    layoutParams.height = val;
+                    morphingProgressView.setLayoutParams(layoutParams);
+                });
+                anim.setDuration(300);
+                anim.start();
             }
 
             @Override
@@ -95,7 +97,9 @@ public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerC
         if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isMusicActive()) {
             albumCoverView.morph();
         } else {
-            new Handler().postDelayed(() -> albumCoverView.morph(), 1000);
+            new Handler().postDelayed(() -> {
+                albumCoverView.morph();
+            }, 1000);
         }
     }
 

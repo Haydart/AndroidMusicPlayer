@@ -9,22 +9,23 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController.MediaPlayerControl;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.andremion.music.MusicCoverView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.background.MusicPlayerService;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
+import pl.rmakowiecki.simplemusicplayer.ui.base.BaseActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.widget.MorphingProgressView;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
-public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerControl {
+public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> implements MusicPlaybackView, MediaPlayerControl {
 
     public static final int ALBUM_COVER_IMAGE_SIZE = 1024;
 
@@ -33,43 +34,54 @@ public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerC
 
     private MusicPlayerService musicPlayerService;
     private Intent musicPlayIntent;
-    private boolean musicBound = false;
     private ServiceConnection musicServiceConnection;
-    private List<Song> songPlaybackList;
     private int currentSongIndex;
+    private List<Song> songPlaybackList;
 
     @OnClick(R.id.play_button)
     public void onPlayButtonClicked() {
-        musicPlayerService.setCurrentSong(currentSongIndex);
-        musicPlayerService.playCurrentSong();
+        presenter.onPlayButtonClicked();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music_play);
-        ButterKnife.bind(this);
         retrieveSongsPlaylist();
         initMusicPlaybackServiceConnection();
-
-        Picasso.with(this)
-                .load(songPlaybackList.get(currentSongIndex).getAlbumCoverUri())
-                .noFade()
-                .resize(ALBUM_COVER_IMAGE_SIZE, ALBUM_COVER_IMAGE_SIZE)
-                .into(albumCoverView);
+        startMusicPlaybackService();
 
         morphingProgressView.setProgress(75);
         morphingProgressView.setMorph(1);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private void startMusicPlaybackService() {
         if (musicPlayIntent == null) {
             musicPlayIntent = new Intent(this, MusicPlayerService.class);
             bindService(musicPlayIntent, musicServiceConnection, Context.BIND_AUTO_CREATE);
             startService(musicPlayIntent);
         }
+    }
+
+    private void initMusicPlaybackServiceConnection() {
+        musicServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                MusicPlayerService.MusicBinder binder = (MusicPlayerService.MusicBinder) service;
+                musicPlayerService = binder.getService();
+                musicPlayerService.setPlaybackList(songPlaybackList);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                //no-op
+            }
+        };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.onViewInitialized(songPlaybackList, currentSongIndex);
 
         albumCoverView.setCallbacks(new MusicCoverView.Callbacks() {
             @Override
@@ -77,15 +89,7 @@ public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerC
                 if (MusicCoverView.SHAPE_CIRCLE == coverView.getShape()) {
                     coverView.start();
                 }
-                ValueAnimator anim = ValueAnimator.ofInt(morphingProgressView.getMeasuredHeight(), -100);
-                anim.addUpdateListener(valueAnimator -> {
-                    int val = (Integer) valueAnimator.getAnimatedValue();
-                    ViewGroup.LayoutParams layoutParams = morphingProgressView.getLayoutParams();
-                    layoutParams.height = val;
-                    morphingProgressView.setLayoutParams(layoutParams);
-                });
-                anim.setDuration(300);
-                anim.start();
+                presenter.onAlbumViewMorphComplete();
             }
 
             @Override
@@ -97,9 +101,7 @@ public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerC
         if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isMusicActive()) {
             albumCoverView.morph();
         } else {
-            new Handler().postDelayed(() -> {
-                albumCoverView.morph();
-            }, 1000);
+            new Handler().postDelayed(() -> albumCoverView.morph(), 1000);
         }
     }
 
@@ -109,21 +111,60 @@ public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerC
         currentSongIndex = intent.getIntExtra(Constants.EXTRA_CURRENT_SONG_POSITION, 0);
     }
 
-    private void initMusicPlaybackServiceConnection() {
-        musicServiceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                MusicPlayerService.MusicBinder binder = (MusicPlayerService.MusicBinder) service;
-                musicPlayerService = binder.getService();
-                musicPlayerService.setPlaybackList(songPlaybackList);
-                musicBound = true;
-            }
+    @Override
+    public void fadeInAlbumCoverImage() {
+        albumCoverView.animate()
+                .withStartAction(() -> albumCoverView.setVisibility(View.VISIBLE))
+                .alpha(1f)
+                .start();
+    }
 
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                musicBound = false;
-            }
-        };
+    @Override
+    public void playSong(int currentSongIndex) {
+        musicPlayerService.setCurrentSong(currentSongIndex);
+        musicPlayerService.playCurrentSong();
+    }
+
+    @Override
+    public void loadAlbumCoverImage() {
+        Picasso.with(this)
+                .load(songPlaybackList.get(currentSongIndex).getAlbumCoverUri())
+                .noFade()
+                .resize(ALBUM_COVER_IMAGE_SIZE, ALBUM_COVER_IMAGE_SIZE)
+                .into(albumCoverView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        presenter.onAlbumCoverImageLoaded();
+                    }
+
+                    @Override
+                    public void onError() {
+                        //no-op
+                    }
+                });
+    }
+
+    @Override
+    public void morphProgressView() {
+        ValueAnimator anim = ValueAnimator.ofInt(morphingProgressView.getMeasuredHeight(), -100);
+        anim.addUpdateListener(valueAnimator -> {
+            int val = (Integer) valueAnimator.getAnimatedValue();
+            ViewGroup.LayoutParams layoutParams = morphingProgressView.getLayoutParams();
+            layoutParams.height = val;
+            morphingProgressView.setLayoutParams(layoutParams);
+        });
+        anim.setDuration(300);
+        anim.start();
+    }
+
+    @Override
+    protected void initPresenter() {
+        presenter = new MusicPlaybackPresenter();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_music_play;
     }
 
     @Override

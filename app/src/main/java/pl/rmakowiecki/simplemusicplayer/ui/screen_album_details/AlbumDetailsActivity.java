@@ -28,7 +28,7 @@ import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseViewHolder;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlayActivity;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlaybackActivity;
 import pl.rmakowiecki.simplemusicplayer.util.AnimationListenerAdapter;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 import pl.rmakowiecki.simplemusicplayer.util.TransitionListenerAdapter;
@@ -168,7 +168,7 @@ public class AlbumDetailsActivity extends BaseActivity<AlbumDetailsPresenter> im
 
     @Override
     public void launchMusicPlaybackScreen(List<Song> songDataSource, int position) {
-        Intent intent = new Intent(this, MusicPlayActivity.class);
+        Intent intent = new Intent(this, MusicPlaybackActivity.class);
         intent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) albumDataSource.getSongs());
         intent.putExtra(Constants.EXTRA_CURRENT_SONG_POSITION, position);
         startActivity(intent);

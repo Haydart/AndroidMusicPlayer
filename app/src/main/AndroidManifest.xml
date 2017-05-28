@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.screen_play.MusicPlayActivity"
+            android:name=".ui.screen_play.MusicPlaybackActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.screen_album_details.AlbumDetailsActivity"

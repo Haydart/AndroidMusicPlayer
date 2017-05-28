@@ -25,7 +25,7 @@ import pl.rmakowiecki.simplemusicplayer.ui.base.BaseActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_album_details.AlbumDetailsActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.albums.AlbumsFragment;
 import pl.rmakowiecki.simplemusicplayer.ui.screen_browse.songs.SongsFragment;
-import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlayActivity;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlaybackActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.widget.ViewWrapper;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
@@ -97,7 +97,7 @@ public class MusicBrowseActivity extends BaseActivity<MusicBrowsePresenter> impl
 
     @Override
     public void launchMusicPlaybackScreen(int position) {
-        Intent intent = new Intent(this, MusicPlayActivity.class);
+        Intent intent = new Intent(this, MusicPlaybackActivity.class);
         intent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) songList);
         intent.putExtra(Constants.EXTRA_CURRENT_SONG_POSITION, position);
         startActivity(intent);

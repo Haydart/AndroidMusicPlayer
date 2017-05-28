@@ -8,14 +8,13 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.widget.MediaController.MediaPlayerControl;
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.andremion.music.MusicCoverView;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
@@ -23,12 +22,14 @@ import pl.rmakowiecki.simplemusicplayer.background.MusicPlayerService;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 
-public class MusicPlayActivity extends AppCompatActivity {
+public class MusicPlayActivity extends AppCompatActivity implements MediaPlayerControl {
 
     public static final int ALBUM_COVER_IMAGE_SIZE = 1024;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.appbar) AppBarLayout appBar;
+
     @BindView(R.id.album_cover_view) MusicCoverView albumCoverView;
+    //@BindView(R.id.ken_burns_background_image) KenBurnsView backgroundAnimatedAlbumCoverView;
+
+    @BindColor(R.color.colorAccent) int accentColor;
 
     private MusicPlayerService musicPlayerService;
     private Intent musicPlayIntent;
@@ -48,9 +49,24 @@ public class MusicPlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_play);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
         retrieveSongsPlaylist();
         initMusicPlaybackServiceConnection();
+
+        Picasso.with(this)
+                .load(songPlaybackList.get(currentSongIndex).getAlbumCoverUri())
+                .noFade()
+                .resize(ALBUM_COVER_IMAGE_SIZE, ALBUM_COVER_IMAGE_SIZE)
+                .centerInside()
+                .into(albumCoverView);
+
+        /*List<Transformation> backgroundImageTransformations = new ArrayList<>(5);
+        backgroundImageTransformations.add(new KuwaharaFilterTransformation(this, 16));
+        backgroundImageTransformations.add(new GrayscaleTransformation());
+
+        Picasso.with(this)
+                .load(songPlaybackList.get(currentSongIndex).getAlbumCoverUri())
+                .transform(backgroundImageTransformations)
+                .into(backgroundAnimatedAlbumCoverView);*/
     }
 
     @Override
@@ -61,23 +77,6 @@ public class MusicPlayActivity extends AppCompatActivity {
             bindService(musicPlayIntent, musicServiceConnection, Context.BIND_AUTO_CREATE);
             startService(musicPlayIntent);
         }
-
-        Picasso.with(this)
-                .load(songPlaybackList.get(currentSongIndex).getAlbumCoverUri())
-                .noFade()
-                .resize(ALBUM_COVER_IMAGE_SIZE, ALBUM_COVER_IMAGE_SIZE)
-                .centerInside()
-                .into(albumCoverView, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        supportStartPostponedEnterTransition();
-                    }
-
-                    @Override
-                    public void onError() {
-                        supportStartPostponedEnterTransition();
-                    }
-                });
 
         albumCoverView.setCallbacks(new MusicCoverView.Callbacks() {
             @Override
@@ -129,5 +128,60 @@ public class MusicPlayActivity extends AppCompatActivity {
             unbindService(musicServiceConnection);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public int getDuration() {
+        return 0;
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return 0;
+    }
+
+    @Override
+    public void seekTo(int pos) {
+
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return false;
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return 0;
+    }
+
+    @Override
+    public boolean canPause() {
+        return false;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return false;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return false;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return 0;
     }
 }

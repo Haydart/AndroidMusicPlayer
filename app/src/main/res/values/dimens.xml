@@ -23,4 +23,5 @@
     <dimen name="album_song_list_cover_frame_padding">3dp</dimen>
     <dimen name="album_song_title_text_view_width">256dp</dimen>
     <dimen name="album_song_list_item_text_size">16sp</dimen>
+    <dimen name="morphing_album_cover_size">256dp</dimen>
 </resources>

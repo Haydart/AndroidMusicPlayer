@@ -24,6 +24,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
     private List<Song> songs;
     private int currentSongPosition;
     private final IBinder musicBinder = new MusicBinder();
+    private WallpaperManager wallpaperManager;
 
     @Nullable
     @Override
@@ -35,12 +36,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
     public void onCreate() {
         super.onCreate();
         currentSongPosition = 0;
+        wallpaperManager = WallpaperManager.getInstance(this);
         initMediaPlayer();
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-
+        // TODO: 05/06/2017 implement
     }
 
     @Override
@@ -87,10 +89,17 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
 
     public void setWallpaperToAlbumCover() {
         try {
-            final WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
             final Uri albumCoverUri = songs.get(currentSongPosition).getAlbumCoverUri();
             final Bitmap albumCoverBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), albumCoverUri);
             wallpaperManager.setBitmap(albumCoverBitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void resetWallpaperToDefault() {
+        try {
+            wallpaperManager.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,6 +114,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
     public void onDestroy() {
         player.stop();
         player.release();
+        resetWallpaperToDefault();
         super.onDestroy();
     }
 

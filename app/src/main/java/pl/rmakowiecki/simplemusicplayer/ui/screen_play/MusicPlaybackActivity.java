@@ -126,6 +126,11 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     @Override
+    public void setAlbumWallpaper() {
+        musicPlayerService.setWallpaperToAlbumCover();
+    }
+
+    @Override
     public void loadAlbumCoverImage() {
         Picasso.with(this)
                 .load(songPlaybackList.get(currentSongIndex).getAlbumCoverUri())
@@ -155,24 +160,6 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         });
         anim.setDuration(300);
         anim.start();
-    }
-
-    @Override
-    protected void initPresenter() {
-        presenter = new MusicPlaybackPresenter();
-    }
-
-    @Override
-    protected int getLayoutResId() {
-        return R.layout.activity_music_play;
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (musicServiceConnection != null) {
-            unbindService(musicServiceConnection);
-        }
-        super.onDestroy();
     }
 
     @Override
@@ -228,5 +215,23 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     @Override
     public int getAudioSessionId() {
         return 0;
+    }
+
+    @Override
+    protected void initPresenter() {
+        presenter = new MusicPlaybackPresenter();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_music_play;
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (musicServiceConnection != null) {
+            unbindService(musicServiceConnection);
+        }
+        super.onDestroy();
     }
 }

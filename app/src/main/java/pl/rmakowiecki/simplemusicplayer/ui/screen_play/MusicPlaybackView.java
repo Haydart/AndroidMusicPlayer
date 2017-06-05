@@ -8,6 +8,8 @@ interface MusicPlaybackView extends BaseView {
 
     void fadeInAlbumCoverImage();
 
+    void setAlbumWallpaper();
+
     void loadAlbumCoverImage();
 
     void morphProgressView();

@@ -126,14 +126,13 @@ public class MorphingProgressView extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-
         // Extra padding to avoid cuttings on arc.
-        float xpad = strokeSize / 2f;
+        float xPadding = strokeSize / 2f;
 
-        bound.top = getPaddingTop() + xpad;
-        bound.bottom = h - getPaddingBottom() - xpad;
-        bound.left = getPaddingLeft() + xpad;
-        bound.right = w - getPaddingRight() - xpad;
+        bound.top = getPaddingTop() + xPadding;
+        bound.bottom = h - getPaddingBottom() - xPadding;
+        bound.left = getPaddingLeft() + xPadding;
+        bound.right = w - getPaddingRight() - xPadding;
     }
 
     @Override
@@ -144,9 +143,6 @@ public class MorphingProgressView extends View {
         float sweepAngle = FULL_PROGRESS_ANGLE * morph;
 
         if (bound.height() <= strokeSize) {
-
-            // Draw the line
-
             paint.setColor(backgroundColor);
             canvas.drawLine(bound.left, bound.top, bound.right, bound.top, paint);
 
@@ -155,18 +151,12 @@ public class MorphingProgressView extends View {
             paint.setColor(foregroundColor);
             canvas.drawLine(bound.left, bound.top, stopX, bound.top, paint);
         } else if (startAngle < 180f) {
-
-            // Draw the arc
-
             paint.setColor(backgroundColor);
             canvas.drawArc(bound, startAngle, sweepAngle, false, paint);
 
             paint.setColor(foregroundColor);
             canvas.drawArc(bound, startAngle, sweepAngle * scale, false, paint);
         } else {
-
-            // Draw the semi-arc
-
             paint.setColor(backgroundColor);
             canvas.drawArc(bound, 180f, 180f, false, paint);
 

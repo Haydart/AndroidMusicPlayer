@@ -18,6 +18,7 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
 
     void onPlayButtonClicked() {
         view.playSong(currentSongIndex);
+        view.setAlbumWallpaper();
     }
 
     void onAlbumViewMorphComplete() {

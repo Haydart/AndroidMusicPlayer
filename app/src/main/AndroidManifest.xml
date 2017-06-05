@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
+    <uses-feature android:name="android.software.live_wallpaper" />
 
     <application
         android:allowBackup="true"
@@ -28,13 +31,26 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.screen_album_details.AlbumDetailsActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.screen_browse.MusicBrowseActivity" />
+            android:parentActivityName=".ui.screen_browse.MusicBrowseActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name=".background.MusicPlayerService" />
         <service
             android:name=".background.OnClearFromRecentService"
             android:stopWithTask="false" />
+        <service
+            android:name=".background.AlbumCoverWallpaperService"
+            android:enabled="true"
+            android:label=""
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/album_cover_wallpaper"></meta-data>
+        </service>
 
     </application>
 

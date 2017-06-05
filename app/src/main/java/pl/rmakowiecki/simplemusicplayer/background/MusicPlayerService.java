@@ -1,8 +1,10 @@
 package pl.rmakowiecki.simplemusicplayer.background;
 
 import android.app.Service;
+import android.app.WallpaperManager;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -81,6 +83,17 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         }
 
         player.prepareAsync();
+    }
+
+    public void setWallpaperToAlbumCover() {
+        try {
+            final WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+            final Uri albumCoverUri = songs.get(currentSongPosition).getAlbumCoverUri();
+            final Bitmap albumCoverBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), albumCoverUri);
+            wallpaperManager.setBitmap(albumCoverBitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -10,7 +10,7 @@ interface MusicPlaybackView extends BaseView {
 
     void setAlbumWallpaper();
 
-    void loadAlbumCoverImage();
+    void loadAlbumCoverImage(int songPosition);
 
     void morphProgressView();
 }

@@ -35,7 +35,6 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     private MusicPlayerService musicPlayerService;
     private Intent musicPlayIntent;
     private ServiceConnection musicServiceConnection;
-    private int currentSongIndex;
     private List<Song> songPlaybackList;
 
     @OnClick(R.id.play_button)
@@ -81,7 +80,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.onViewInitialized(songPlaybackList, currentSongIndex);
+        presenter.onViewInitialized(songPlaybackList, getCurrentSongPosition());
 
         albumCoverView.setCallbacks(new MusicCoverView.Callbacks() {
             @Override
@@ -106,9 +105,11 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     private void retrieveSongsPlaylist() {
-        Intent intent = getIntent();
-        songPlaybackList = intent.getParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL);
-        currentSongIndex = intent.getIntExtra(Constants.EXTRA_CURRENT_SONG_POSITION, 0);
+        songPlaybackList = getIntent().getParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL);
+    }
+
+    private int getCurrentSongPosition() {
+        return getIntent().getIntExtra(Constants.EXTRA_CURRENT_SONG_POSITION, 0);
     }
 
     @Override
@@ -131,9 +132,9 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     @Override
-    public void loadAlbumCoverImage() {
+    public void loadAlbumCoverImage(int songPosition) {
         Picasso.with(this)
-                .load(songPlaybackList.get(currentSongIndex).getAlbumCoverUri())
+                .load(songPlaybackList.get(songPosition).getAlbumCoverUri())
                 .noFade()
                 .resize(ALBUM_COVER_IMAGE_SIZE, ALBUM_COVER_IMAGE_SIZE)
                 .into(albumCoverView, new Callback() {

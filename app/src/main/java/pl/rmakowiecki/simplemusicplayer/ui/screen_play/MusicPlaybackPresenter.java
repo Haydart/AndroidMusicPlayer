@@ -9,7 +9,8 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
     private int currentSongIndex;
 
     void onViewInitialized(List<Song> songPlaybackList, int currentSongIndex) {
-        view.loadAlbumCoverImage();
+        this.currentSongIndex = currentSongIndex;
+        view.loadAlbumCoverImage(currentSongIndex);
     }
 
     void onAlbumCoverImageLoaded() {

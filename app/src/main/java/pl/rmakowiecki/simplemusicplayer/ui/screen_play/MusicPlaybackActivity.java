@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController.MediaPlayerControl;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.andremion.music.MusicCoverView;
@@ -32,6 +33,9 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
 
     @BindView(R.id.album_cover_view) MusicCoverView albumCoverView;
     @BindView(R.id.morping_progress_view) MorphingProgressView morphingProgressView;
+    @BindView(R.id.song_title_text_view) TextView songTitleTextView;
+    @BindView(R.id.song_artist_text_view) TextView songArtistTextView;
+    @BindView(R.id.song_album_text_view) TextView songAlbumTextView;
 
     private MusicPlayerService musicPlayerService;
     private Intent musicPlayIntent;
@@ -49,12 +53,6 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         retrieveSongsPlaylist();
         initMusicPlaybackServiceConnection();
         startMusicPlaybackService();
-        initMusicProgressVIew();
-    }
-
-    private void initMusicProgressVIew() {
-        morphingProgressView.setProgress(75);
-        morphingProgressView.setMorph(1);
     }
 
     private void startMusicPlaybackService() {
@@ -85,6 +83,19 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     protected void onStart() {
         super.onStart();
         presenter.onViewInitialized(songPlaybackList, getCurrentSongPosition());
+    }
+
+    @Override
+    public void initMusicProgressView() {
+        morphingProgressView.setProgress(75);
+        morphingProgressView.setMorph(1);
+    }
+
+    @Override
+    public void showSongInformation(Song currentSong) {
+        songTitleTextView.setText(currentSong.getTitle());
+        songArtistTextView.setText(currentSong.getArtist());
+        songAlbumTextView.setText(currentSong.getAlbumName());
     }
 
     private void retrieveSongsPlaylist() {

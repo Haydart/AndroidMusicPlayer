@@ -56,7 +56,7 @@ public class MorphingProgressView extends View {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.colorAccent, outValue, true);
         foregroundColor = outValue.data;
-        backgroundColor = R.color.white_alpha;
+        backgroundColor = R.color.white_half_alpha;
 
         currentProgress = 0;
         max = 100;

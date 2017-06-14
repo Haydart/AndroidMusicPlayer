@@ -6,11 +6,15 @@ import pl.rmakowiecki.simplemusicplayer.ui.base.BasePresenter;
 
 class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
 
+    private List<Song> songList;
     private int currentSongIndex;
 
     void onViewInitialized(List<Song> songPlaybackList, int currentSongIndex) {
+        this.songList = songPlaybackList;
         this.currentSongIndex = currentSongIndex;
         view.loadAlbumCoverImage(currentSongIndex);
+        view.initMusicProgressView();
+        view.showSongInformation(songPlaybackList.get(currentSongIndex));
     }
 
     void onAlbumCoverImageLoaded() {

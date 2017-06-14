@@ -5,5 +5,6 @@
     <color name="colorPrimaryDark">#160012</color>
     <color name="cardview_dark_background">#000000</color>
     <color name="cardview_light_background">#FFFFFF</color>
-    <color name="white_alpha">#55FFFFFF</color>
+    <color name="white_half_alpha">#88FFFFFF</color>
+    <color name="white_quarter_alpha">#66FFFFFF</color>
 </resources>

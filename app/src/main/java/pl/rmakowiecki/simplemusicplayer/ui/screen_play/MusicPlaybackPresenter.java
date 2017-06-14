@@ -18,11 +18,12 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
     }
 
     void onPlayButtonClicked() {
+        view.morphAlbumCoverView();
         view.playSong(currentSongIndex);
         view.setAlbumWallpaper();
     }
 
     void onAlbumViewMorphComplete() {
-        view.morphProgressView();
+        view.morphRevealProgressView();
     }
 }

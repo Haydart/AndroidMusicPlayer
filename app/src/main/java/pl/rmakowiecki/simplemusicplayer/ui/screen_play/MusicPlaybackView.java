@@ -12,5 +12,9 @@ interface MusicPlaybackView extends BaseView {
 
     void loadAlbumCoverImage(int songPosition);
 
-    void morphProgressView();
+    void morphAlbumCoverView();
+
+    void morphCollapseProgressView();
+
+    void morphRevealProgressView();
 }

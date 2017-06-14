@@ -21,6 +21,32 @@
             android:src="#22FFFFFF" />
     </com.github.florent37.diagonallayout.DiagonalLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/song_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/song_artist_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            tools:text="Artist" />
+
+        <TextView
+            android:id="@+id/song_album_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            tools:text="Album" />
+    </LinearLayout>
+
     <com.andremion.music.MusicCoverView
         android:id="@+id/album_cover_view"
         android:layout_width="match_parent"
@@ -31,8 +57,9 @@
     <pl.rmakowiecki.simplemusicplayer.ui.widget.MorphingProgressView
         android:id="@+id/morping_progress_view"
         android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_height="320dp"
         android:layout_gravity="center"
+        android:paddingTop="312dp"
         app:layout_aspectRatio="100%" />
 
     <LinearLayout

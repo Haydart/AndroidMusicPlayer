@@ -39,6 +39,8 @@ dependencies {
 
 	compile "com.android.support:appcompat-v7:${build_version}"
 	compile "com.android.support:support-v4:${build_version}"
+	compile "com.android.support:support-vector-drawable:${build_version}"
+	compile "com.android.support:animated-vector-drawable:${build_version}"
 	compile "com.android.support:design:${build_version}"
 	compile "com.android.support:support-fragment:${build_version}"
 	compile "com.android.support:recyclerview-v7:${build_version}"

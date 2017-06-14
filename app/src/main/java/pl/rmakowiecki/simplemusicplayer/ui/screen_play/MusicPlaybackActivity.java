@@ -6,13 +6,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.MediaController.MediaPlayerControl;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.andremion.music.MusicCoverView;
@@ -36,6 +39,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     @BindView(R.id.song_title_text_view) TextView songTitleTextView;
     @BindView(R.id.song_artist_text_view) TextView songArtistTextView;
     @BindView(R.id.song_album_text_view) TextView songAlbumTextView;
+    @BindView(R.id.play_pause_button) ImageView playPauseButton;
 
     private MusicPlayerService musicPlayerService;
     private Intent musicPlayIntent;
@@ -53,6 +57,15 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         retrieveSongsPlaylist();
         initMusicPlaybackServiceConnection();
         startMusicPlaybackService();
+    }
+
+    @OnClick(R.id.play_pause_button)
+    public void onClick(ImageView playPauseButton) {
+        Toast.makeText(this, "clicked play button", Toast.LENGTH_SHORT).show();
+
+        AnimatedVectorDrawable drawable = (AnimatedVectorDrawable) getDrawable(R.drawable.play_to_pause_vector_anim);
+        playPauseButton.setImageDrawable(drawable);
+        drawable.start();
     }
 
     private void startMusicPlaybackService() {

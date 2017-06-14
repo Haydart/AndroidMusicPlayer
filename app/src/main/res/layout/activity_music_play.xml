@@ -32,7 +32,7 @@
             android:id="@+id/song_title_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="@dimen/music_play_screen_song_title_margin_top"
             style="@style/MusicPlaybackSongTitleStyle"
             tools:text="Title" />
 
@@ -83,6 +83,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="play" />
+
+            <ImageView
+                android:id="@+id/play_pause_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:srcCompat="@drawable/play_to_pause_vector_anim" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

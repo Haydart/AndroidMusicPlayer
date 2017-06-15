@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController.MediaPlayerControl;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.andremion.music.MusicCoverView;
@@ -46,26 +44,12 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     private ServiceConnection musicServiceConnection;
     private List<Song> songPlaybackList;
 
-    @OnClick(R.id.play_button)
-    public void onPlayButtonClicked() {
-        presenter.onPlayButtonClicked();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         retrieveSongsPlaylist();
         initMusicPlaybackServiceConnection();
         startMusicPlaybackService();
-    }
-
-    @OnClick(R.id.play_pause_button)
-    public void onClick(ImageView playPauseButton) {
-        Toast.makeText(this, "clicked play button", Toast.LENGTH_SHORT).show();
-
-        AnimatedVectorDrawable drawable = (AnimatedVectorDrawable) getDrawable(R.drawable.play_to_pause_vector_anim);
-        playPauseButton.setImageDrawable(drawable);
-        drawable.start();
     }
 
     private void startMusicPlaybackService() {
@@ -83,6 +67,8 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
                 MusicPlayerService.MusicBinder binder = (MusicPlayerService.MusicBinder) service;
                 musicPlayerService = binder.getService();
                 musicPlayerService.setPlaybackList(songPlaybackList);
+                musicPlayerService.setCurrentSong(getCurrentSongPosition());
+                musicPlayerService.prepareForPlaying();
             }
 
             @Override
@@ -119,6 +105,25 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         return getIntent().getIntExtra(Constants.EXTRA_CURRENT_SONG_POSITION, 0);
     }
 
+    @OnClick(R.id.play_pause_button)
+    public void onClick(ImageView playPauseButton) {
+        presenter.onPlayPauseButtonClicked();
+    }
+
+    @Override
+    public void animateButtonToNotPlayingState() {
+        AnimatedVectorDrawable drawable = (AnimatedVectorDrawable) getDrawable(R.drawable.play_to_pause_vector_anim);
+        playPauseButton.setImageDrawable(drawable);
+        drawable.start();
+    }
+
+    @Override
+    public void animateButtonToPlayingState() {
+        AnimatedVectorDrawable drawable = (AnimatedVectorDrawable) getDrawable(R.drawable.pause_to_play_vector_anim);
+        playPauseButton.setImageDrawable(drawable);
+        drawable.start();
+    }
+
     @Override
     public void fadeInAlbumCoverImage() {
         albumCoverView.animate()
@@ -131,6 +136,11 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     public void playSong(int currentSongIndex) {
         musicPlayerService.setCurrentSong(currentSongIndex);
         musicPlayerService.playCurrentSong();
+    }
+
+    @Override
+    public void pauseSong(int currentSongIndex) {
+        musicPlayerService.pauseCurrentSong();
     }
 
     @Override
@@ -158,14 +168,14 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     @Override
-    public void morphAlbumCoverView() {
+    public void morphAlbumCoverToPlayingState() {
         albumCoverView.setCallbacks(new MusicCoverView.Callbacks() {
             @Override
             public void onMorphEnd(MusicCoverView coverView) {
                 if (MusicCoverView.SHAPE_CIRCLE == coverView.getShape()) {
                     coverView.start();
                 }
-                presenter.onAlbumViewMorphComplete();
+                presenter.onAlbumCoverPlayMorphComplete();
             }
 
             @Override
@@ -174,11 +184,24 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
             }
         });
 
-        if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isMusicActive()) {
-            albumCoverView.morph();
-        } else {
-            albumCoverView.morph();
-        }
+        albumCoverView.morph();
+    }
+
+    @Override
+    public void morphAlbumCoverToPausedState() {
+        albumCoverView.setCallbacks(new MusicCoverView.Callbacks() {
+            @Override
+            public void onMorphEnd(MusicCoverView coverView) {
+                presenter.onAlbumCoverPauseMorphComplete();
+            }
+
+            @Override
+            public void onRotateEnd(MusicCoverView coverView) {
+                coverView.morph();
+            }
+        });
+
+        albumCoverView.stop();
     }
 
     @Override

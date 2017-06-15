@@ -8,6 +8,7 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
 
     private List<Song> songList;
     private int currentSongIndex;
+    private boolean isMusicPlaying = false;
 
     void onViewInitialized(List<Song> songPlaybackList, int currentSongIndex) {
         this.songList = songPlaybackList;
@@ -21,13 +22,27 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
         view.fadeInAlbumCoverImage();
     }
 
-    void onPlayButtonClicked() {
-        view.morphAlbumCoverView();
-        view.playSong(currentSongIndex);
+    void onPlayPauseButtonClicked() {
+        if (isMusicPlaying) {
+            isMusicPlaying = false;
+            view.animateButtonToPlayingState();
+            view.morphAlbumCoverToPausedState();
+            view.pauseSong(currentSongIndex);
+        } else {
+            isMusicPlaying = true;
+            view.animateButtonToNotPlayingState();
+            view.morphAlbumCoverToPlayingState();
+            view.playSong(currentSongIndex);
+        }
+
         view.setAlbumWallpaper();
     }
 
-    void onAlbumViewMorphComplete() {
+    void onAlbumCoverPlayMorphComplete() {
         view.morphRevealProgressView();
+    }
+
+    void onAlbumCoverPauseMorphComplete() {
+        view.morphCollapseProgressView();
     }
 }

@@ -11,13 +11,21 @@ interface MusicPlaybackView extends BaseView {
 
     void showSongInformation(Song currentSong);
 
+    void animateButtonToNotPlayingState();
+
+    void animateButtonToPlayingState();
+
     void fadeInAlbumCoverImage();
+
+    void pauseSong(int currentSongIndex);
 
     void setAlbumWallpaper();
 
     void loadAlbumCoverImage(int songPosition);
 
-    void morphAlbumCoverView();
+    void morphAlbumCoverToPlayingState();
+
+    void morphAlbumCoverToPausedState();
 
     void morphCollapseProgressView();
 

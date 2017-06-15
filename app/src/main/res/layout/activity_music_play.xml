@@ -71,24 +71,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#88000000"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/play_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="play" />
+        android:orientation="vertical"
+        android:paddingBottom="64dp">
 
             <ImageView
                 android:id="@+id/play_pause_button"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                app:srcCompat="@drawable/play_to_pause_vector_anim" />
-        </LinearLayout>
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/pause_to_play_vector_anim" />
     </LinearLayout>
 </FrameLayout>

@@ -6,6 +6,8 @@ import pl.rmakowiecki.simplemusicplayer.ui.base.BasePresenter;
 
 class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
 
+    public static final double FLOAT_COMPARISON_EPSILON = 0.0001;
+    public static final float HALF_ANGLE = 180f;
     private List<Song> songList;
     private int currentSongIndex;
     private boolean isMusicPlaying = false;
@@ -38,8 +40,11 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
         view.setAlbumWallpaper();
     }
 
-    void onScreenScrolledHorizontally(float positionOffsetPixels) {
-        view.setRotationForAlbumComponents(positionOffsetPixels / 3, -positionOffsetPixels / 3);
+    void onScreenScrolledHorizontally(float positionOffset) {
+        view.setRotationForAlbumComponents(
+                (positionOffset < FLOAT_COMPARISON_EPSILON ? positionOffset : (1 - positionOffset)) * -HALF_ANGLE,
+                (positionOffset < FLOAT_COMPARISON_EPSILON ? positionOffset : (1 - positionOffset)) * -HALF_ANGLE
+        );
     }
 
     void onAlbumCoverPlayMorphComplete() {

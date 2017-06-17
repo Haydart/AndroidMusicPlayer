@@ -359,7 +359,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        presenter.onScreenScrolledHorizontally((float) positionOffsetPixels);
+        presenter.onScreenScrolledHorizontally(positionOffset);
     }
 
     @Override

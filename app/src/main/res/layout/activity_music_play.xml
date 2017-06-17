@@ -24,30 +24,60 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/song_title_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/music_play_screen_song_title_margin_top"
             style="@style/MusicPlaybackSongTitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/standard_margin_large"
+            android:layout_marginStart="@dimen/standard_margin_large"
+            android:layout_marginTop="@dimen/music_play_screen_song_title_margin_top"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:lines="1"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
             tools:text="Title" />
 
         <TextView
             android:id="@+id/song_artist_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             style="@style/MusicPlaybackSongArtistStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/standard_margin_large"
+            android:layout_marginStart="@dimen/standard_margin_large"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:lines="1"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
             tools:text="Artist" />
 
         <TextView
             android:id="@+id/song_album_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             style="@style/MusicPlaybackSongAlbumStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/standard_margin_large"
+            android:layout_marginStart="@dimen/standard_margin_large"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:lines="1"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
             tools:text="Album" />
     </LinearLayout>
 
@@ -74,11 +104,11 @@
         android:orientation="vertical"
         android:paddingBottom="64dp">
 
-            <ImageView
-                android:id="@+id/play_pause_button"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/pause_to_play_vector_anim" />
+        <ImageView
+            android:id="@+id/play_pause_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@drawable/play_to_pause_vector_anim" />
     </LinearLayout>
 </FrameLayout>

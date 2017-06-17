@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,9 @@ import pl.rmakowiecki.simplemusicplayer.util.ConversionUtils;
 public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> implements MusicPlaybackView, MediaPlayerControl {
 
     public static final int ALBUM_COVER_IMAGE_SIZE = 1024;
+    public static final int COVER_PAUSE_MORPH_DELAY = 350;
+    public static final String HEIGHT_PROPERTY_NAME = "height";
+    public static final String PADDING_PROPERTY_NAME = "paddingTop";
 
     @BindView(R.id.album_cover_view) MusicCoverView albumCoverView;
     @BindView(R.id.morping_progress_view) MorphingProgressView morphingProgressView;
@@ -50,6 +54,13 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         retrieveSongsPlaylist();
         initMusicPlaybackServiceConnection();
         startMusicPlaybackService();
+        supportMarqueeTextViews();
+    }
+
+    private void supportMarqueeTextViews() {
+        songTitleTextView.setSelected(true);
+        songAlbumTextView.setSelected(true);
+        songArtistTextView.setSelected(true);
     }
 
     private void startMusicPlaybackService() {
@@ -106,7 +117,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     @OnClick(R.id.play_pause_button)
-    public void onClick(ImageView playPauseButton) {
+    public void onClick() {
         presenter.onPlayPauseButtonClicked();
     }
 
@@ -174,8 +185,8 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
             public void onMorphEnd(MusicCoverView coverView) {
                 if (MusicCoverView.SHAPE_CIRCLE == coverView.getShape()) {
                     coverView.start();
+                    presenter.onAlbumCoverPlayMorphComplete();
                 }
-                presenter.onAlbumCoverPlayMorphComplete();
             }
 
             @Override
@@ -184,7 +195,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
             }
         });
 
-        albumCoverView.morph();
+        new Handler().post(() -> albumCoverView.morph());
     }
 
     @Override
@@ -192,12 +203,13 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         albumCoverView.setCallbacks(new MusicCoverView.Callbacks() {
             @Override
             public void onMorphEnd(MusicCoverView coverView) {
-                presenter.onAlbumCoverPauseMorphComplete();
+                //no-op
             }
 
             @Override
             public void onRotateEnd(MusicCoverView coverView) {
-                coverView.morph();
+                morphCollapseProgressView();
+                new Handler().postDelayed(coverView::morph, COVER_PAUSE_MORPH_DELAY);
             }
         });
 
@@ -206,21 +218,21 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
 
     @Override
     public void morphCollapseProgressView() {
-        PropertyValuesHolder heightHolder = PropertyValuesHolder.ofInt("height",
+        PropertyValuesHolder heightHolder = PropertyValuesHolder.ofInt(HEIGHT_PROPERTY_NAME,
                 morphingProgressView.getMeasuredHeight(),
                 (int) ConversionUtils.convertDpToPixel(320, this));
-        PropertyValuesHolder paddingHolder = PropertyValuesHolder.ofInt("paddingTop",
+        PropertyValuesHolder paddingHolder = PropertyValuesHolder.ofInt(PADDING_PROPERTY_NAME,
                 morphingProgressView.getPaddingTop(),
                 (int) ConversionUtils.convertDpToPixel(312, this));
 
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(heightHolder, paddingHolder);
         animator.addUpdateListener(valueAnimator -> {
-            int updatedHeight = (int) valueAnimator.getAnimatedValue("height");
+            int updatedHeight = (int) valueAnimator.getAnimatedValue(HEIGHT_PROPERTY_NAME);
             ViewGroup.LayoutParams layoutParams = morphingProgressView.getLayoutParams();
             layoutParams.height = updatedHeight;
             morphingProgressView.setLayoutParams(layoutParams);
 
-            int updatedPadding = (int) valueAnimator.getAnimatedValue("paddingTop");
+            int updatedPadding = (int) valueAnimator.getAnimatedValue(PADDING_PROPERTY_NAME);
             morphingProgressView.setPadding(
                     morphingProgressView.getPaddingLeft(),
                     updatedPadding,
@@ -228,27 +240,26 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
                     morphingProgressView.getPaddingRight()
             );
         });
-        animator.setDuration(300);
         animator.start();
     }
 
     @Override
     public void morphRevealProgressView() {
-        PropertyValuesHolder heightHolder = PropertyValuesHolder.ofInt("height",
+        PropertyValuesHolder heightHolder = PropertyValuesHolder.ofInt(HEIGHT_PROPERTY_NAME,
                 morphingProgressView.getMeasuredHeight(),
                 (int) ConversionUtils.convertDpToPixel(300, this));
-        PropertyValuesHolder paddingHolder = PropertyValuesHolder.ofInt("paddingTop",
+        PropertyValuesHolder paddingHolder = PropertyValuesHolder.ofInt(PADDING_PROPERTY_NAME,
                 morphingProgressView.getPaddingTop(),
                 (int) ConversionUtils.convertDpToPixel(0, this));
 
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(heightHolder, paddingHolder);
         animator.addUpdateListener(valueAnimator -> {
-            int updatedHeight = (int) valueAnimator.getAnimatedValue("height");
+            int updatedHeight = (int) valueAnimator.getAnimatedValue(HEIGHT_PROPERTY_NAME);
             ViewGroup.LayoutParams layoutParams = morphingProgressView.getLayoutParams();
             layoutParams.height = updatedHeight;
             morphingProgressView.setLayoutParams(layoutParams);
 
-            int updatedPadding = (int) valueAnimator.getAnimatedValue("paddingTop");
+            int updatedPadding = (int) valueAnimator.getAnimatedValue(PADDING_PROPERTY_NAME);
             morphingProgressView.setPadding(
                     morphingProgressView.getPaddingLeft(),
                     updatedPadding,
@@ -256,18 +267,17 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
                     morphingProgressView.getPaddingRight()
             );
         });
-        animator.setDuration(300);
         animator.start();
     }
 
     @Override
     public void start() {
-
+        // TODO: 15/06/2017 implement
     }
 
     @Override
     public void pause() {
-
+        // TODO: 15/06/2017 implement
     }
 
     @Override
@@ -282,7 +292,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
 
     @Override
     public void seekTo(int pos) {
-
+        // TODO: 15/06/2017 implement
     }
 
     @Override

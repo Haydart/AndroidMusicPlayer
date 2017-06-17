@@ -17,7 +17,6 @@ import android.widget.MediaController.MediaPlayerControl;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
-import com.andremion.music.MusicCoverView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import java.util.List;
@@ -26,6 +25,7 @@ import pl.rmakowiecki.simplemusicplayer.background.MusicPlayerService;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.widget.MorphingProgressView;
+import pl.rmakowiecki.simplemusicplayer.ui.widget.MusicCoverView;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 import pl.rmakowiecki.simplemusicplayer.util.ConversionUtils;
 

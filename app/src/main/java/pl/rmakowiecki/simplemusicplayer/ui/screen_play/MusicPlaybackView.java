@@ -30,4 +30,6 @@ interface MusicPlaybackView extends BaseView {
     void morphCollapseProgressView();
 
     void morphRevealProgressView();
+
+    void setRotationForAlbumComponents(float morphingProgressViewRotation, float albumCoverViewRotation);
 }

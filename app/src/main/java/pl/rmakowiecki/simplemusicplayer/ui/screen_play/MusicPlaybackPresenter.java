@@ -38,11 +38,19 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
         view.setAlbumWallpaper();
     }
 
+    void onScreenScrolledHorizontally(float positionOffsetPixels) {
+        view.setRotationForAlbumComponents(positionOffsetPixels / 3, -positionOffsetPixels / 3);
+    }
+
     void onAlbumCoverPlayMorphComplete() {
         view.morphRevealProgressView();
     }
 
-    void onAlbumCoverPauseMorphComplete() {
-        view.morphCollapseProgressView();
+    void onMusicSwiped(int position) {
+        // TODO: 17/06/2017 implement
+    }
+
+    void onAlbumCoverImageLoadError() {
+        // TODO: 17/06/2017 implement
     }
 }

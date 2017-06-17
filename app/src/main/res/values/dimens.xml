@@ -25,4 +25,5 @@
     <dimen name="album_song_list_item_text_size">16sp</dimen>
     <dimen name="morphing_album_cover_size">256dp</dimen>
     <dimen name="music_play_screen_song_title_margin_top">44dp</dimen>
+    <dimen name="music_playback_control_button_size">56dp</dimen>
 </resources>

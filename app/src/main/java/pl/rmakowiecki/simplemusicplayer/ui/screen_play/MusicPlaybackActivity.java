@@ -17,6 +17,8 @@ import android.widget.MediaController.MediaPlayerControl;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import java.util.List;
@@ -26,10 +28,11 @@ import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BaseActivity;
 import pl.rmakowiecki.simplemusicplayer.ui.widget.MorphingProgressView;
 import pl.rmakowiecki.simplemusicplayer.ui.widget.MusicCoverView;
+import pl.rmakowiecki.simplemusicplayer.ui.widget.MusicPlaybackSliderView;
 import pl.rmakowiecki.simplemusicplayer.util.Constants;
 import pl.rmakowiecki.simplemusicplayer.util.ConversionUtils;
 
-public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> implements MusicPlaybackView, MediaPlayerControl {
+public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> implements MusicPlaybackView, MediaPlayerControl, ViewPagerEx.OnPageChangeListener {
 
     public static final int ALBUM_COVER_IMAGE_SIZE = 1024;
     public static final int COVER_PAUSE_MORPH_DELAY = 350;
@@ -37,11 +40,12 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     public static final String PADDING_PROPERTY_NAME = "paddingTop";
 
     @BindView(R.id.album_cover_view) MusicCoverView albumCoverView;
-    @BindView(R.id.morping_progress_view) MorphingProgressView morphingProgressView;
+    @BindView(R.id.morphing_progress_view) MorphingProgressView morphingProgressView;
     @BindView(R.id.song_title_text_view) TextView songTitleTextView;
     @BindView(R.id.song_artist_text_view) TextView songArtistTextView;
     @BindView(R.id.song_album_text_view) TextView songAlbumTextView;
     @BindView(R.id.play_pause_button) ImageView playPauseButton;
+    @BindView(R.id.background_slider_layout) SliderLayout backgroundSliderLayout;
 
     private MusicPlayerService musicPlayerService;
     private Intent musicPlayIntent;
@@ -55,6 +59,16 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         initMusicPlaybackServiceConnection();
         startMusicPlaybackService();
         supportMarqueeTextViews();
+
+        final MusicPlaybackSliderView leftBackgroundSliderView =
+                new MusicPlaybackSliderView(this, R.layout.music_playback_diagonal_background_left);
+        final MusicPlaybackSliderView rightBackgroundSliderView =
+                new MusicPlaybackSliderView(this, R.layout.music_playback_diagonal_background_right);
+
+        backgroundSliderLayout.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        backgroundSliderLayout.addOnPageChangeListener(this);
+        backgroundSliderLayout.addSlider(leftBackgroundSliderView);
+        backgroundSliderLayout.addSlider(rightBackgroundSliderView);
     }
 
     private void supportMarqueeTextViews() {
@@ -173,7 +187,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
 
                     @Override
                     public void onError() {
-                        //no-op
+                        presenter.onAlbumCoverImageLoadError();
                     }
                 });
     }
@@ -341,5 +355,26 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
             unbindService(musicServiceConnection);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        presenter.onScreenScrolledHorizontally((float) positionOffsetPixels);
+    }
+
+    @Override
+    public void setRotationForAlbumComponents(float morphingProgressViewRotation, float albumCoverViewRotation) {
+        morphingProgressView.setRotationY(morphingProgressViewRotation);
+        albumCoverView.setRotationY(albumCoverViewRotation);
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        presenter.onMusicSwiped(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        //no-op
     }
 }

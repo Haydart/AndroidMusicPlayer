@@ -13,7 +13,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
@@ -26,6 +25,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
     private int currentSongPosition;
     private final IBinder musicBinder = new MusicBinder();
     private WallpaperManager wallpaperManager;
+    private boolean shouldPlayImmediately = true;
 
     @Nullable
     @Override
@@ -53,7 +53,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        Toast.makeText(this, "player prepared", Toast.LENGTH_SHORT).show();
+        if (shouldPlayImmediately) {
+            player.start();
+        }
     }
 
     private void initMediaPlayer() {
@@ -100,16 +102,20 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         return player.isPlaying();
     }
 
-    public void pauseCurrentSong() {
-        player.pause();
-    }
-
     public void seek(int posn) {
         player.seekTo(posn);
     }
 
+    public void prepareAndPlay() {
+        prepareForPlaying();
+    }
+
     public void playCurrentSong() {
         player.start();
+    }
+
+    public void pauseCurrentSong() {
+        player.pause();
     }
 
     public void setWallpaperToAlbumCover() {

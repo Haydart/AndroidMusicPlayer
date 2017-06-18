@@ -94,6 +94,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
                 musicPlayerService.setPlaybackList(songPlaybackList);
                 musicPlayerService.setCurrentSong(getCurrentSongPosition());
                 musicPlayerService.prepareForPlaying();
+                presenter.onMusicPlayingComponentInitialized();
             }
 
             @Override
@@ -130,9 +131,19 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         return getIntent().getIntExtra(Constants.EXTRA_CURRENT_SONG_POSITION, 0);
     }
 
+    @OnClick(R.id.previous_button)
+    public void onPreviousButtonClick() {
+        presenter.onPreviousSongButtonClicked();
+    }
+
     @OnClick(R.id.play_pause_button)
-    public void onClick() {
+    public void onPlayButtonClick() {
         presenter.onPlayPauseButtonClicked();
+    }
+
+    @OnClick(R.id.next_button)
+    public void onNextButtonClick() {
+        presenter.onNextSongButtonClicked();
     }
 
     @Override
@@ -153,19 +164,9 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     public void fadeInAlbumCoverImage() {
         albumCoverView.animate()
                 .withStartAction(() -> albumCoverView.setVisibility(View.VISIBLE))
+                .setDuration(600)
                 .alpha(1f)
                 .start();
-    }
-
-    @Override
-    public void playSong(int currentSongIndex) {
-        musicPlayerService.setCurrentSong(currentSongIndex);
-        musicPlayerService.playCurrentSong();
-    }
-
-    @Override
-    public void pauseSong(int currentSongIndex) {
-        musicPlayerService.pauseCurrentSong();
     }
 
     @Override
@@ -177,7 +178,6 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     public void loadAlbumCoverImage(int songPosition) {
         Picasso.with(this)
                 .load(songPlaybackList.get(songPosition).getAlbumCoverUri())
-                .noFade()
                 .resize(ALBUM_COVER_IMAGE_SIZE, ALBUM_COVER_IMAGE_SIZE)
                 .into(albumCoverView, new Callback() {
                     @Override
@@ -285,6 +285,28 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     @Override
+    public void playCurrentSong() {
+        musicPlayerService.playCurrentSong();
+    }
+
+    @Override
+    public void pauseCurrentSong() {
+        musicPlayerService.pauseCurrentSong();
+    }
+
+    @Override
+    public void playNextSong(int songIndex) {
+        musicPlayerService.setCurrentSong(songIndex);
+        musicPlayerService.prepareAndPlay();
+    }
+
+    @Override
+    public void playPreviousSong(int songIndex) {
+        musicPlayerService.setCurrentSong(songIndex);
+        musicPlayerService.prepareAndPlay();
+    }
+
+    @Override
     public void start() {
         // TODO: 15/06/2017 implement
     }
@@ -350,14 +372,6 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     @Override
-    protected void onDestroy() {
-        if (musicServiceConnection != null) {
-            unbindService(musicServiceConnection);
-        }
-        super.onDestroy();
-    }
-
-    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         presenter.onScreenScrolledHorizontally(positionOffset);
     }
@@ -369,6 +383,16 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     @Override
+    public void animateToNextSong() {
+        backgroundSliderLayout.moveNextPosition(true);
+    }
+
+    @Override
+    public void animateToPreviousSong() {
+        backgroundSliderLayout.movePrevPosition(true);
+    }
+
+    @Override
     public void onPageSelected(int position) {
         presenter.onMusicSwiped(position);
     }
@@ -376,5 +400,13 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     @Override
     public void onPageScrollStateChanged(int state) {
         //no-op
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (musicServiceConnection != null) {
+            unbindService(musicServiceConnection);
+        }
+        super.onDestroy();
     }
 }

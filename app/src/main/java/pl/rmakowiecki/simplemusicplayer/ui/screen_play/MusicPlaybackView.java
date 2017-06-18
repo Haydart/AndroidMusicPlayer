@@ -5,8 +5,6 @@ import pl.rmakowiecki.simplemusicplayer.ui.base.BaseView;
 
 interface MusicPlaybackView extends BaseView {
 
-    void playSong(int currentSongIndex);
-
     void initMusicProgressView();
 
     void showSongInformation(Song currentSong);
@@ -17,7 +15,9 @@ interface MusicPlaybackView extends BaseView {
 
     void fadeInAlbumCoverImage();
 
-    void pauseSong(int currentSongIndex);
+    void playCurrentSong();
+
+    void pauseCurrentSong();
 
     void setAlbumWallpaper();
 
@@ -32,4 +32,12 @@ interface MusicPlaybackView extends BaseView {
     void morphRevealProgressView();
 
     void setRotationForAlbumComponents(float morphingProgressViewRotation, float albumCoverViewRotation);
+
+    void animateToNextSong();
+
+    void animateToPreviousSong();
+
+    void playNextSong(int songIndex);
+
+    void playPreviousSong(int songIndex);
 }

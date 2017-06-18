@@ -1,16 +1,18 @@
 package pl.rmakowiecki.simplemusicplayer.ui.screen_play;
 
+import android.util.Log;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BasePresenter;
 
 class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
 
-    public static final double FLOAT_COMPARISON_EPSILON = 0.0001;
-    public static final float HALF_ANGLE = 180f;
+    private static final double FLOAT_COMPARISON_EPSILON = 0.0001;
+    private static final float HALF_ANGLE = 180f;
     private List<Song> songList;
     private int currentSongIndex;
     private boolean isMusicPlaying = false;
+    private boolean isSongPlayingComponentInitialized = false;
 
     void onViewInitialized(List<Song> songPlaybackList, int currentSongIndex) {
         this.songList = songPlaybackList;
@@ -18,6 +20,10 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
         view.loadAlbumCoverImage(currentSongIndex);
         view.initMusicProgressView();
         view.showSongInformation(songPlaybackList.get(currentSongIndex));
+    }
+
+    void onMusicPlayingComponentInitialized() {
+        isSongPlayingComponentInitialized = true;
     }
 
     void onAlbumCoverImageLoaded() {
@@ -29,12 +35,12 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
             isMusicPlaying = false;
             view.animateButtonToPlayingState();
             view.morphAlbumCoverToPausedState();
-            view.pauseSong(currentSongIndex);
+            view.pauseCurrentSong();
         } else {
             isMusicPlaying = true;
             view.animateButtonToNotPlayingState();
             view.morphAlbumCoverToPlayingState();
-            view.playSong(currentSongIndex);
+            view.playCurrentSong();
         }
 
         view.setAlbumWallpaper();
@@ -52,10 +58,23 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
     }
 
     void onMusicSwiped(int position) {
-        // TODO: 17/06/2017 implement
+        Log.d(getClass().getSimpleName(), "Swiped to position" + position);
+        if (isSongPlayingComponentInitialized) {
+            view.loadAlbumCoverImage(++currentSongIndex);
+            view.showSongInformation(songList.get(currentSongIndex));
+            view.playNextSong(currentSongIndex);
+        }
     }
 
     void onAlbumCoverImageLoadError() {
         // TODO: 17/06/2017 implement
+    }
+
+    void onNextSongButtonClicked() {
+        view.animateToNextSong();
+    }
+
+    void onPreviousSongButtonClicked() {
+        view.animateToPreviousSong();
     }
 }

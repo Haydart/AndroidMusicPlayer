@@ -13,7 +13,7 @@ interface MusicPlaybackView extends BaseView {
 
     void animateButtonToPlayingState();
 
-    void fadeInAlbumCoverImage();
+    void showAlbumCoverImageAnimated();
 
     void playCurrentSong();
 

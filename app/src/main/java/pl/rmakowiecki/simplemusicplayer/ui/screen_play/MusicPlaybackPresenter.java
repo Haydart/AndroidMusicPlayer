@@ -27,7 +27,7 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
     }
 
     void onAlbumCoverImageLoaded() {
-        view.fadeInAlbumCoverImage();
+        view.showAlbumCoverImageAnimated();
     }
 
     void onPlayPauseButtonClicked() {

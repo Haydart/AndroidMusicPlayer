@@ -1,5 +1,7 @@
 package pl.rmakowiecki.simplemusicplayer.ui.screen_play;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.ComponentName;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController.MediaPlayerControl;
@@ -38,6 +41,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     public static final int COVER_PAUSE_MORPH_DELAY = 350;
     public static final String HEIGHT_PROPERTY_NAME = "height";
     public static final String PADDING_PROPERTY_NAME = "paddingTop";
+    public static final int CIRCULAR_REVEAL_START_DELAY = 200;
 
     @BindView(R.id.album_cover_view) MusicCoverView albumCoverView;
     @BindView(R.id.morphing_progress_view) MorphingProgressView morphingProgressView;
@@ -159,12 +163,24 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     @Override
-    public void fadeInAlbumCoverImage() {
-        albumCoverView.animate()
-                .withStartAction(() -> albumCoverView.setVisibility(View.VISIBLE))
-                .setDuration(600)
-                .alpha(1f)
-                .start();
+    public void showAlbumCoverImageAnimated() {
+        albumCoverView.post(() -> {
+            int cx = albumCoverView.getMeasuredWidth() / 2;
+            int cy = albumCoverView.getMeasuredHeight() / 2;
+
+            int finalRadius = Math.max(albumCoverView.getWidth(), albumCoverView.getHeight());
+
+            Animator animator = ViewAnimationUtils.createCircularReveal(albumCoverView, cx, cy, 0, finalRadius);
+            animator.setStartDelay(CIRCULAR_REVEAL_START_DELAY);
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                    albumCoverView.setVisibility(View.VISIBLE);
+                }
+            });
+            animator.start();
+        });
     }
 
     @Override

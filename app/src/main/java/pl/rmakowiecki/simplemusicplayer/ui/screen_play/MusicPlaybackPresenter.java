@@ -12,6 +12,7 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
     private int currentSongIndex;
     private boolean isMusicPlaying = false;
     private boolean isSongPlayingComponentInitialized = false;
+    private boolean isFirstImageLoaded = true;
     private int currentSliderTab = 0;
 
     void onViewInitialized(List<Song> songPlaybackList, int currentSongIndex) {
@@ -27,7 +28,10 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
     }
 
     void onAlbumCoverImageLoaded() {
-        view.showAlbumCoverImageAnimated();
+        if (isFirstImageLoaded) {
+            isFirstImageLoaded = false;
+            view.showAlbumCoverImageAnimated();
+        }
     }
 
     void onPlayPauseButtonClicked() {

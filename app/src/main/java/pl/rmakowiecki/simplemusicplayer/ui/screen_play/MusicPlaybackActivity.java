@@ -63,7 +63,18 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         initMusicPlaybackServiceConnection();
         startMusicPlaybackService();
         supportMarqueeTextViews();
+        initBackgroundSlider();
 
+        presenter.onViewInitialized(songPlaybackList, getCurrentSongPosition());
+    }
+
+    private void supportMarqueeTextViews() {
+        songTitleTextView.setSelected(true);
+        songAlbumTextView.setSelected(true);
+        songArtistTextView.setSelected(true);
+    }
+
+    private void initBackgroundSlider() {
         final MusicPlaybackSliderView leftBackgroundSliderView =
                 new MusicPlaybackSliderView(this, R.layout.music_playback_diagonal_background_left);
         final MusicPlaybackSliderView rightBackgroundSliderView =
@@ -75,14 +86,6 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         backgroundSliderLayout.addSlider(rightBackgroundSliderView);
         backgroundSliderLayout.addSlider(leftBackgroundSliderView);
         backgroundSliderLayout.addSlider(rightBackgroundSliderView);
-
-        presenter.onViewInitialized(songPlaybackList, getCurrentSongPosition());
-    }
-
-    private void supportMarqueeTextViews() {
-        songTitleTextView.setSelected(true);
-        songAlbumTextView.setSelected(true);
-        songArtistTextView.setSelected(true);
     }
 
     private void startMusicPlaybackService() {

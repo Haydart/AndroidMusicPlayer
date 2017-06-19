@@ -1,5 +1,7 @@
 package pl.rmakowiecki.simplemusicplayer.background;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.app.WallpaperManager;
 import android.content.ContentUris;
@@ -10,12 +12,17 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import pl.rmakowiecki.simplemusicplayer.R;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
+import pl.rmakowiecki.simplemusicplayer.ui.screen_play.MusicPlaybackActivity;
+import pl.rmakowiecki.simplemusicplayer.util.Constants;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -23,6 +30,7 @@ import rx.schedulers.Schedulers;
 public class MusicPlayerService extends Service implements MediaPlayer.OnErrorListener,
         MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
+    public static final int NOTIFICATION_ID = 1;
     private MediaPlayer player;
     private List<Song> songs;
     private int currentSongPosition;
@@ -60,6 +68,29 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
             player.start();
             shouldPlayImmediately = false;
         }
+
+        showMusicPlayingNotification();
+    }
+
+    private void showMusicPlayingNotification() {
+        Intent notificationIntent = new Intent(this, MusicPlaybackActivity.class);
+        notificationIntent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) songs);
+        notificationIntent.putExtra(Constants.EXTRA_CURRENT_SONG_POSITION, currentSongPosition);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendInt = PendingIntent.getActivity(this, 0,
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification.Builder builder = new Notification.Builder(this);
+
+        builder.setContentIntent(pendInt)
+                .setSmallIcon(R.drawable.play_button)
+                .setTicker(songs.get(currentSongPosition).getTitle())
+                .setOngoing(true)
+                .setContentTitle(songs.get(currentSongPosition).getTitle())
+                .setContentText(songs.get(currentSongPosition).getArtist());
+        Notification notification = builder.build();
+
+        startForeground(NOTIFICATION_ID, notification);
     }
 
     private void initMediaPlayer() {
@@ -160,6 +191,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
 
     @Override
     public void onDestroy() {
+        stopForeground(true);
         player.stop();
         player.release();
         resetWallpaperToDefault();

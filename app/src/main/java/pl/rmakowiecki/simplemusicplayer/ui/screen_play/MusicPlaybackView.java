@@ -31,13 +31,13 @@ interface MusicPlaybackView extends BaseView {
 
     void morphRevealProgressView();
 
+    void playNextSong(int songIndex, boolean playImmediately);
+
+    void playPreviousSong(int songIndex, boolean playImmediately);
+
     void setRotationForAlbumComponents(float morphingProgressViewRotation, float albumCoverViewRotation);
 
     void animateToNextSong();
 
     void animateToPreviousSong();
-
-    void playNextSong(int songIndex);
-
-    void playPreviousSong(int songIndex);
 }

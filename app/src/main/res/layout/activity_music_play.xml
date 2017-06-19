@@ -96,7 +96,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#88000000"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/standard_margin_xlarge"
         android:paddingRight="@dimen/standard_margin_xlarge"

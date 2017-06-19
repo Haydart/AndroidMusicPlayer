@@ -16,6 +16,9 @@ import android.support.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MusicPlayerService extends Service implements MediaPlayer.OnErrorListener,
         MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
@@ -55,6 +58,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
     public void onPrepared(MediaPlayer mediaPlayer) {
         if (shouldPlayImmediately) {
             player.start();
+            shouldPlayImmediately = false;
         }
     }
 
@@ -75,19 +79,30 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         currentSongPosition = songIndex;
     }
 
-    public void prepareForPlaying() {
-        player.reset();
-        Song currentlyPlayedSong = songs.get(currentSongPosition);
-        long currentSongId = currentlyPlayedSong.getId();
-        Uri trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currentSongId);
+    public void prepareAndPlay() {
+        shouldPlayImmediately = true;
+        prepare();
+    }
 
-        try {
-            player.setDataSource(getApplicationContext(), trackUri);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public void prepare() {
+        Observable
+                .just(null)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(ignored -> {
+                    player.reset();
+                    Song currentlyPlayedSong = songs.get(currentSongPosition);
+                    long currentSongId = currentlyPlayedSong.getId();
+                    Uri trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currentSongId);
 
-        player.prepareAsync();
+                    try {
+                        player.setDataSource(getApplicationContext(), trackUri);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    player.prepareAsync();
+                });
     }
 
     public int getCurrentSongPosition() {
@@ -106,10 +121,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         player.seekTo(posn);
     }
 
-    public void prepareAndPlay() {
-        prepareForPlaying();
-    }
-
     public void playCurrentSong() {
         player.start();
     }
@@ -119,13 +130,19 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
     }
 
     public void setWallpaperToAlbumCover() {
-        try {
-            final Uri albumCoverUri = songs.get(currentSongPosition).getAlbumCoverUri();
-            final Bitmap albumCoverBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), albumCoverUri);
-            wallpaperManager.setBitmap(albumCoverBitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Observable
+                .just(null)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(ignored -> {
+                    try {
+                        final Uri albumCoverUri = songs.get(currentSongPosition).getAlbumCoverUri();
+                        final Bitmap albumCoverBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), albumCoverUri);
+                        wallpaperManager.setBitmap(albumCoverBitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     private void resetWallpaperToDefault() {

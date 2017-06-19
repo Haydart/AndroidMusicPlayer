@@ -69,6 +69,10 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         backgroundSliderLayout.addOnPageChangeListener(this);
         backgroundSliderLayout.addSlider(leftBackgroundSliderView);
         backgroundSliderLayout.addSlider(rightBackgroundSliderView);
+        backgroundSliderLayout.addSlider(leftBackgroundSliderView);
+        backgroundSliderLayout.addSlider(rightBackgroundSliderView);
+
+        presenter.onViewInitialized(songPlaybackList, getCurrentSongPosition());
     }
 
     private void supportMarqueeTextViews() {
@@ -93,7 +97,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
                 musicPlayerService = binder.getService();
                 musicPlayerService.setPlaybackList(songPlaybackList);
                 musicPlayerService.setCurrentSong(getCurrentSongPosition());
-                musicPlayerService.prepareForPlaying();
+                musicPlayerService.prepare();
                 presenter.onMusicPlayingComponentInitialized();
             }
 
@@ -102,12 +106,6 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
                 //no-op
             }
         };
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.onViewInitialized(songPlaybackList, getCurrentSongPosition());
     }
 
     @Override
@@ -295,15 +293,23 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     @Override
-    public void playNextSong(int songIndex) {
+    public void playNextSong(int songIndex, boolean playImmediately) {
         musicPlayerService.setCurrentSong(songIndex);
-        musicPlayerService.prepareAndPlay();
+        if (playImmediately) {
+            musicPlayerService.prepareAndPlay();
+        } else {
+            musicPlayerService.prepare();
+        }
     }
 
     @Override
-    public void playPreviousSong(int songIndex) {
+    public void playPreviousSong(int songIndex, boolean playImmediately) {
         musicPlayerService.setCurrentSong(songIndex);
-        musicPlayerService.prepareAndPlay();
+        if (playImmediately) {
+            musicPlayerService.prepareAndPlay();
+        } else {
+            musicPlayerService.prepare();
+        }
     }
 
     @Override

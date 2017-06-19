@@ -1,6 +1,5 @@
 package pl.rmakowiecki.simplemusicplayer.ui.screen_play;
 
-import android.util.Log;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BasePresenter;
@@ -13,6 +12,7 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
     private int currentSongIndex;
     private boolean isMusicPlaying = false;
     private boolean isSongPlayingComponentInitialized = false;
+    private int currentSliderTab = 0;
 
     void onViewInitialized(List<Song> songPlaybackList, int currentSongIndex) {
         this.songList = songPlaybackList;
@@ -42,8 +42,6 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
             view.morphAlbumCoverToPlayingState();
             view.playCurrentSong();
         }
-
-        view.setAlbumWallpaper();
     }
 
     void onScreenScrolledHorizontally(float positionOffset) {
@@ -58,11 +56,16 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
     }
 
     void onMusicSwiped(int position) {
-        Log.d(getClass().getSimpleName(), "Swiped to position" + position);
         if (isSongPlayingComponentInitialized) {
-            view.loadAlbumCoverImage(++currentSongIndex);
+            if (position == (currentSliderTab + 1) % 4) {
+                view.loadAlbumCoverImage(++currentSongIndex);
+                view.playNextSong(currentSongIndex, isMusicPlaying);
+            } else {
+                view.loadAlbumCoverImage(--currentSongIndex);
+                view.playPreviousSong(currentSongIndex, isMusicPlaying);
+            }
             view.showSongInformation(songList.get(currentSongIndex));
-            view.playNextSong(currentSongIndex);
+            currentSliderTab = position;
         }
     }
 

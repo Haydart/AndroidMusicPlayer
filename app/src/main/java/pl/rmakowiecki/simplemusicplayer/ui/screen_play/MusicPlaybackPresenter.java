@@ -58,10 +58,12 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
     void onMusicSwiped(int position) {
         if (isSongPlayingComponentInitialized) {
             if (position == (currentSliderTab + 1) % 4) {
-                view.loadAlbumCoverImage(++currentSongIndex);
+                currentSongIndex = currentSongIndex == songList.size() - 1 ? 0 : currentSongIndex + 1;
+                view.loadAlbumCoverImage(currentSongIndex);
                 view.playNextSong(currentSongIndex, isMusicPlaying);
             } else {
-                view.loadAlbumCoverImage(--currentSongIndex);
+                currentSongIndex = currentSongIndex == 0 ? songList.size() - 1 : currentSongIndex - 1;
+                view.loadAlbumCoverImage(currentSongIndex);
                 view.playPreviousSong(currentSongIndex, isMusicPlaying);
             }
             view.showSongInformation(songList.get(currentSongIndex));

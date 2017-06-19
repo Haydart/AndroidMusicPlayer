@@ -28,7 +28,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
     private int currentSongPosition;
     private final IBinder musicBinder = new MusicBinder();
     private WallpaperManager wallpaperManager;
-    private boolean shouldPlayImmediately = true;
+    private boolean shouldPlayImmediately = false;
 
     @Nullable
     @Override

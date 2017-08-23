@@ -1,8 +1,12 @@
 package pl.rmakowiecki.simplemusicplayer.ui.screen_play;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.ui.base.BasePresenter;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
 
@@ -21,6 +25,14 @@ class MusicPlaybackPresenter extends BasePresenter<MusicPlaybackView> {
         view.loadAlbumCoverImage(currentSongIndex);
         view.initMusicProgressView();
         view.showSongInformation(songPlaybackList.get(currentSongIndex));
+
+        Observable
+                .timer(750, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(ignored -> {
+                    view.setAlbumWallpaper();
+                });
     }
 
     void onMusicPlayingComponentInitialized() {

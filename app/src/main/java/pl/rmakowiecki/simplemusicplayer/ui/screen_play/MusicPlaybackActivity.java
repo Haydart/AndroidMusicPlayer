@@ -195,6 +195,7 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     public void loadAlbumCoverImage(int songPosition) {
         Picasso.with(this)
                 .load(songPlaybackList.get(songPosition).getAlbumCoverUri())
+                .error(R.drawable.placeholder_album_cover)
                 .resize(ALBUM_COVER_IMAGE_SIZE, ALBUM_COVER_IMAGE_SIZE)
                 .into(albumCoverView, new Callback() {
                     @Override

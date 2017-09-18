@@ -159,9 +159,9 @@ public class AlbumDetailsActivity extends BaseActivity<AlbumDetailsPresenter> im
 
     private void getAlbumDataFromExtras() {
         Bundle extras = getIntent().getExtras();
-        albumDataSource = extras.getParcelable(Constants.EXTRA_ALBUM_MODEL);
+        albumDataSource = extras.getParcelable(Constants.INSTANCE.getEXTRA_ALBUM_MODEL());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String imageTransitionName = extras.getString(Constants.EXTRA_ALBUM_IMAGE_TRANSITION_NAME);
+            String imageTransitionName = extras.getString(Constants.INSTANCE.getEXTRA_ALBUM_IMAGE_TRANSITION_NAME());
             albumImageView.setTransitionName(imageTransitionName);
         }
     }
@@ -169,8 +169,8 @@ public class AlbumDetailsActivity extends BaseActivity<AlbumDetailsPresenter> im
     @Override
     public void launchMusicPlaybackScreen(List<Song> songDataSource, int position) {
         Intent intent = new Intent(this, MusicPlaybackActivity.class);
-        intent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) albumDataSource.getSongs());
-        intent.putExtra(Constants.EXTRA_CURRENT_SONG_POSITION, position);
+        intent.putParcelableArrayListExtra(Constants.INSTANCE.getEXTRA_SONG_MODEL(), (ArrayList<? extends Parcelable>) albumDataSource.getSongs());
+        intent.putExtra(Constants.INSTANCE.getEXTRA_CURRENT_SONG_POSITION(), position);
         startActivity(intent);
     }
 

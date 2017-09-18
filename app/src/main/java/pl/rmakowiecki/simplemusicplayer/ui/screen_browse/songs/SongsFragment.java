@@ -27,7 +27,7 @@ public class SongsFragment extends BaseFragment<SongsFragmentPresenter> implemen
     @Override
     public void setupSongsList() {
         songsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        List<Song> songsList = getArguments().getParcelableArrayList(Constants.EXTRA_SONG_MODEL);
+        List<Song> songsList = getArguments().getParcelableArrayList(Constants.INSTANCE.getEXTRA_SONG_MODEL());
         songsRecyclerView.setAdapter(new SongRecyclerViewAdapter(songsList,
                 (modelData, adapterPosition) -> listener.onSongClicked(modelData, adapterPosition)));
     }

@@ -98,8 +98,8 @@ public class MusicBrowseActivity extends BaseActivity<MusicBrowsePresenter> impl
     @Override
     public void launchMusicPlaybackScreen(int position) {
         Intent intent = new Intent(this, MusicPlaybackActivity.class);
-        intent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) songList);
-        intent.putExtra(Constants.EXTRA_CURRENT_SONG_POSITION, position);
+        intent.putParcelableArrayListExtra(Constants.INSTANCE.getEXTRA_SONG_MODEL(), (ArrayList<? extends Parcelable>) songList);
+        intent.putExtra(Constants.INSTANCE.getEXTRA_CURRENT_SONG_POSITION(), position);
         startActivity(intent);
     }
 
@@ -111,8 +111,8 @@ public class MusicBrowseActivity extends BaseActivity<MusicBrowsePresenter> impl
     @Override
     public void launchAlbumDetailsScreen(Album album, ViewWrapper viewWrapper) {
         Intent intent = new Intent(this, AlbumDetailsActivity.class);
-        intent.putExtra(Constants.EXTRA_ALBUM_MODEL, album);
-        intent.putExtra(Constants.EXTRA_ALBUM_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(viewWrapper.getView()));
+        intent.putExtra(Constants.INSTANCE.getEXTRA_ALBUM_MODEL(), album);
+        intent.putExtra(Constants.INSTANCE.getEXTRA_ALBUM_IMAGE_TRANSITION_NAME(), ViewCompat.getTransitionName(viewWrapper.getView()));
 
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 this,

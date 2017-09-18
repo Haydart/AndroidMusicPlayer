@@ -35,10 +35,10 @@ class BrowseScreenPagerAdapter extends FragmentPagerAdapter {
 
         if (position == 0) {
             result = SongsFragment.newInstance();
-            args.putParcelableArrayList(Constants.EXTRA_SONG_MODEL, (ArrayList<Song>) songList);
+            args.putParcelableArrayList(Constants.INSTANCE.getEXTRA_SONG_MODEL(), (ArrayList<Song>) songList);
         } else {
             result = AlbumsFragment.newInstance();
-            args.putParcelableArrayList(Constants.EXTRA_ALBUM_MODEL, (ArrayList<Album>) albumList);
+            args.putParcelableArrayList(Constants.INSTANCE.getEXTRA_ALBUM_MODEL(), (ArrayList<Album>) albumList);
         }
         result.setArguments(args);
         return result;

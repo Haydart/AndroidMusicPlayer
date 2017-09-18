@@ -92,7 +92,6 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
         if (musicPlayIntent == null) {
             musicPlayIntent = new Intent(this, MusicPlayerService.class);
             bindService(musicPlayIntent, musicServiceConnection, Context.BIND_AUTO_CREATE);
-            startService(musicPlayIntent);
         }
     }
 
@@ -129,11 +128,11 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     private void retrieveSongsPlaylist() {
-        songPlaybackList = getIntent().getParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL);
+        songPlaybackList = getIntent().getParcelableArrayListExtra(Constants.INSTANCE.getEXTRA_SONG_MODEL());
     }
 
     private int getCurrentSongPosition() {
-        return getIntent().getIntExtra(Constants.EXTRA_CURRENT_SONG_POSITION, 0);
+        return getIntent().getIntExtra(Constants.INSTANCE.getEXTRA_CURRENT_SONG_POSITION(), 0);
     }
 
     @OnClick(R.id.previous_button)
@@ -252,10 +251,10 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     public void morphCollapseProgressView() {
         PropertyValuesHolder heightHolder = PropertyValuesHolder.ofInt(HEIGHT_PROPERTY_NAME,
                 morphingProgressView.getMeasuredHeight(),
-                (int) ConversionUtils.convertDpToPixel(320, this));
+                (int) ConversionUtils.INSTANCE.convertDpToPixel(320, this));
         PropertyValuesHolder paddingHolder = PropertyValuesHolder.ofInt(PADDING_PROPERTY_NAME,
                 morphingProgressView.getPaddingTop(),
-                (int) ConversionUtils.convertDpToPixel(312, this));
+                (int) ConversionUtils.INSTANCE.convertDpToPixel(312, this));
 
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(heightHolder, paddingHolder);
         animator.addUpdateListener(valueAnimator -> {
@@ -279,10 +278,10 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     public void morphRevealProgressView() {
         PropertyValuesHolder heightHolder = PropertyValuesHolder.ofInt(HEIGHT_PROPERTY_NAME,
                 morphingProgressView.getMeasuredHeight(),
-                (int) ConversionUtils.convertDpToPixel(300, this));
+                (int) ConversionUtils.INSTANCE.convertDpToPixel(300, this));
         PropertyValuesHolder paddingHolder = PropertyValuesHolder.ofInt(PADDING_PROPERTY_NAME,
                 morphingProgressView.getPaddingTop(),
-                (int) ConversionUtils.convertDpToPixel(0, this));
+                (int) ConversionUtils.INSTANCE.convertDpToPixel(0, this));
 
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(heightHolder, paddingHolder);
         animator.addUpdateListener(valueAnimator -> {

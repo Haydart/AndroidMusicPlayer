@@ -128,11 +128,11 @@ public class MusicPlaybackActivity extends BaseActivity<MusicPlaybackPresenter> 
     }
 
     private void retrieveSongsPlaylist() {
-        songPlaybackList = getIntent().getParcelableArrayListExtra(Constants.INSTANCE.getEXTRA_SONG_MODEL());
+        songPlaybackList = getIntent().getParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL);
     }
 
     private int getCurrentSongPosition() {
-        return getIntent().getIntExtra(Constants.INSTANCE.getEXTRA_CURRENT_SONG_POSITION(), 0);
+        return getIntent().getIntExtra(Constants.EXTRA_CURRENT_SONG_POSITION, 0);
     }
 
     @OnClick(R.id.previous_button)

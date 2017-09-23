@@ -49,7 +49,7 @@
 
             <meta-data
                 android:name="android.service.wallpaper"
-                android:resource="@xml/album_cover_wallpaper"></meta-data>
+                android:resource="@xml/album_cover_wallpaper" />
         </service>
 
     </application>

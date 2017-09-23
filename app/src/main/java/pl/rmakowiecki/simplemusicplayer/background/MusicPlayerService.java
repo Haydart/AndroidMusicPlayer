@@ -74,8 +74,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
 
     private void showMusicPlayingNotification() {
         Intent notificationIntent = new Intent(this, MusicPlaybackActivity.class);
-        notificationIntent.putParcelableArrayListExtra(Constants.INSTANCE.getEXTRA_SONG_MODEL(), (ArrayList<? extends Parcelable>) songs);
-        notificationIntent.putExtra(Constants.INSTANCE.getEXTRA_CURRENT_SONG_POSITION(), currentSongPosition);
+        notificationIntent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, (ArrayList<? extends Parcelable>) songs);
+        notificationIntent.putExtra(Constants.EXTRA_CURRENT_SONG_POSITION, currentSongPosition);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendInt = PendingIntent.getActivity(this, 0,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);

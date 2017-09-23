@@ -32,7 +32,7 @@ public class AlbumsFragment extends BaseFragment<AlbumsFragmentPresenter> implem
 
     @Override
     public void setupAlbumsList() {
-        albumsList = getArguments().getParcelableArrayList(Constants.INSTANCE.getEXTRA_ALBUM_MODEL());
+        albumsList = getArguments().getParcelableArrayList(Constants.EXTRA_ALBUM_MODEL);
         addAlbumArtistHeaders();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), COLUMN_COUNT);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {

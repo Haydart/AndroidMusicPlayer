@@ -116,24 +116,18 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
     }
 
     public void prepare() {
-        Observable
-                .just(null)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(ignored -> {
-                    player.reset();
-                    Song currentlyPlayedSong = songs.get(currentSongPosition);
-                    long currentSongId = currentlyPlayedSong.getId();
-                    Uri trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currentSongId);
+        player.reset();
+        Song currentlyPlayedSong = songs.get(currentSongPosition);
+        long currentSongId = currentlyPlayedSong.getId();
+        Uri trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currentSongId);
 
-                    try {
-                        player.setDataSource(getApplicationContext(), trackUri);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+        try {
+            player.setDataSource(getApplicationContext(), trackUri);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
-                    player.prepareAsync();
-                });
+        player.prepareAsync();
     }
 
     public int getCurrentSongPosition() {

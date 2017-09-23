@@ -17,7 +17,6 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 import java.util.ArrayList;
 import java.util.List;
 import pl.rmakowiecki.simplemusicplayer.R;
-import pl.rmakowiecki.simplemusicplayer.background.OnClearFromRecentService;
 import pl.rmakowiecki.simplemusicplayer.model.Album;
 import pl.rmakowiecki.simplemusicplayer.model.Song;
 import pl.rmakowiecki.simplemusicplayer.provider.MusicProvider;
@@ -44,7 +43,6 @@ public class MusicBrowseActivity extends BaseActivity<MusicBrowsePresenter> impl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupAppBar();
-        startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
         musicProvider = new MusicProvider(this);
 
         new RxPermissions(this)

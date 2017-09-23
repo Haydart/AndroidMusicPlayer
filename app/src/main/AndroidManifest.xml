@@ -35,9 +35,7 @@
             android:screenOrientation="portrait" />
 
         <service android:name=".background.MusicPlayerService" />
-        <service
-            android:name=".background.OnClearFromRecentService"
-            android:stopWithTask="false" />
+
         <service
             android:name=".background.AlbumCoverWallpaperService"
             android:enabled="true"

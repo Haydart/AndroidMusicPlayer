@@ -179,6 +179,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
     }
 
     @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        stopSelf();
+    }
+
+    @Override
     public boolean onUnbind(Intent intent) {
         return super.onUnbind(intent);
     }

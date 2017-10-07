@@ -15,47 +15,35 @@ import java.util.*
 const val ALBUM_COVER_DIRECTORY = "content://media/external/audio/albumart"
 
 class MusicProvider(private val context: Context) {
-    private var songList: MutableList<Song>? = null
-    private var albumList: MutableList<Album>? = null
+    private var songList by lazy { retrieveDeviceSongList() }
+    private var albumList = mutableListOf<Album>()
 
-    val deviceSongList: MutableList<Song>?
-        get() {
-            if (songList == null) retrieveDeviceSongList()
-            return songList
-        }
-
-    val deviceAlbumList: MutableList<Album>?
-        get() {
-            if (albumList == null) retrieveDeviceAlbumList()
-            return albumList
-        }
 
     private fun retrieveDeviceSongList() {
-        songList = ArrayList<Song>()
+        val list = mutableListOf<Song>()
         val musicResolver = context.contentResolver
-        val musicCursor = musicResolver.query(EXTERNAL_CONTENT_URI, null, null, null, null)
-
-        if (musicCursor != null && musicCursor.moveToFirst()) {
-            val titleColumn = musicCursor.getColumnIndex(TITLE)
-            val idColumn = musicCursor.getColumnIndex(_ID)
-            val artistColumn = musicCursor.getColumnIndex(ARTIST)
-            val albumCoverColumn = musicCursor.getColumnIndex(ALBUM_ID)
-            val albumNameColumn = musicCursor.getColumnIndex(ALBUM)
-            val durationColumn = musicCursor.getColumnIndex(DURATION)
-            do {
-                val thisId = musicCursor.getLong(idColumn)
-                val songTitle = musicCursor.getString(titleColumn)
-                val songArtist = musicCursor.getString(artistColumn)
-                val songAlbum = musicCursor.getString(albumNameColumn)
-                val albumCoverId = musicCursor.getLong(albumCoverColumn)
-                val albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY)
-                val albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, albumCoverId)
-                val songDuration = musicCursor.getLong(durationColumn)
-                songList!!.add(Song(thisId, songTitle, songArtist, songAlbum, albumArtUri, songDuration.toInt()))
-            } while (musicCursor.moveToNext())
+        val musicCursor = musicResolver.query(EXTERNAL_CONTENT_URI, null, null, null, null).use {
+            if (it != null && it.moveToFirst()) {
+                val titleColumn = it.getColumnIndex(TITLE)
+                val idColumn = it.getColumnIndex(_ID)
+                val artistColumn = it.getColumnIndex(ARTIST)
+                val albumCoverColumn = it.getColumnIndex(ALBUM_ID)
+                val albumNameColumn = it.getColumnIndex(ALBUM)
+                val durationColumn = it.getColumnIndex(DURATION)
+                do {
+                    val thisId = it.getLong(idColumn)
+                    val songTitle = it.getString(titleColumn)
+                    val songArtist = it.getString(artistColumn)
+                    val songAlbum = it.getString(albumNameColumn)
+                    val albumCoverId = it.getLong(albumCoverColumn)
+                    val albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY)
+                    val albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, albumCoverId)
+                    val songDuration = it.getLong(durationColumn)
+                    songList!!.add(Song(thisId, songTitle, songArtist, songAlbum, albumArtUri, songDuration.toInt()))
+                } while (it.moveToNext())
+            }
         }
-        musicCursor!!.close()
-        Collections.sort(songList!!) { a, b -> a.title.compareTo(b.title) }
+        return Collections.sort(songList!!) { a, b -> a.title.compareTo(b.title) }
     }
 
     private fun retrieveDeviceAlbumList() {

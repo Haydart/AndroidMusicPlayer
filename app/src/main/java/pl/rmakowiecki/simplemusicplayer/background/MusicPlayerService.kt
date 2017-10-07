@@ -9,7 +9,6 @@ import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Binder
-import android.os.IBinder
 import android.os.Parcelable
 import android.os.PowerManager
 import android.provider.MediaStore
@@ -22,7 +21,7 @@ import java.util.*
 
 private const val NOTIFICATION_ID = 1
 
-class MusicPlayerService : Service(), MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+class MusicPlayerService : Service() {
     private var player: MediaPlayer? = null
     private var songs: List<Song> = emptyList()
     private var currentSongPosition: Int = 0
@@ -30,24 +29,9 @@ class MusicPlayerService : Service(), MediaPlayer.OnErrorListener, MediaPlayer.O
     private var wallpaperManager: WallpaperManager? = null
     private var shouldPlayImmediately = false
 
-    override fun onBind(intent: Intent): IBinder? {
-        return musicBinder
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        currentSongPosition = 0
-        wallpaperManager = WallpaperManager.getInstance(this)
-        initMediaPlayer()
-    }
-
-    override fun onCompletion(mediaPlayer: MediaPlayer) {
-        // TODO: 05/06/2017 implement
-    }
-
-    override fun onError(mediaPlayer: MediaPlayer, what: Int, extra: Int) = false
-
-    override fun onPrepared(mediaPlayer: MediaPlayer) {
+    val errorListener = MediaPlayer.OnErrorListener { _, _, _ -> false }
+    val completionListener = MediaPlayer.OnCompletionListener { }
+    val prepareListener = MediaPlayer.OnPreparedListener {
         if (shouldPlayImmediately) {
             player?.start()
             shouldPlayImmediately = false
@@ -56,11 +40,22 @@ class MusicPlayerService : Service(), MediaPlayer.OnErrorListener, MediaPlayer.O
         showMusicPlayingNotification()
     }
 
+    override fun onBind(intent: Intent) = musicBinder
+
+    override fun onCreate() {
+        super.onCreate()
+        currentSongPosition = 0
+        wallpaperManager = WallpaperManager.getInstance(this)
+        initMediaPlayer()
+    }
+
     private fun showMusicPlayingNotification() {
-        val notificationIntent = Intent(this, MusicPlaybackActivity::class.java)
-        notificationIntent.putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, songs as ArrayList<out Parcelable>?)
-        notificationIntent.putExtra(Constants.EXTRA_CURRENT_SONG_POSITION, currentSongPosition)
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val notificationIntent = Intent(this, MusicPlaybackActivity::class.java).apply {
+            putParcelableArrayListExtra(Constants.EXTRA_SONG_MODEL, songs as ArrayList<out Parcelable>?)
+            putExtra(Constants.EXTRA_CURRENT_SONG_POSITION, currentSongPosition)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+
         val pendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -68,22 +63,23 @@ class MusicPlayerService : Service(), MediaPlayer.OnErrorListener, MediaPlayer.O
 
         builder.setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.play_button)
-                .setTicker(songs?.get(currentSongPosition)?.title)
+                .setTicker(songs[currentSongPosition].title)
                 .setOngoing(true)
                 .setContentTitle(songs[currentSongPosition].title)
-                .setContentText(songs?[currentSongPosition].artist)
+                .setContentText(songs[currentSongPosition].artist)
         val notification = builder.build()
 
         startForeground(NOTIFICATION_ID, notification)
     }
 
     private fun initMediaPlayer() {
+
         player = MediaPlayer().apply {
             setWakeMode(applicationContext, PowerManager.PARTIAL_WAKE_LOCK)
             setAudioStreamType(AudioManager.STREAM_MUSIC)
-            setOnPreparedListener { }
-            setOnErrorListener { }
-            setOnCompletionListener { }
+            setOnPreparedListener { prepareListener }
+            setOnErrorListener(errorListener)
+            setOnCompletionListener { completionListener }
         }
     }
 
@@ -100,45 +96,40 @@ class MusicPlayerService : Service(), MediaPlayer.OnErrorListener, MediaPlayer.O
         prepare()
     }
 
-    fun prepare() {
-        player?.reset()
-        val (currentSongId) = songs?[currentSongPosition]
+    fun prepare() = player?.let {
+        it.reset()
+        val currentSongId = songs[currentSongPosition].id
         val trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currentSongId)
 
         try {
-            player?.setDataSource(applicationContext, trackUri)
+            it.setDataSource(applicationContext, trackUri)
         } catch (ex: IOException) {
             ex.printStackTrace()
         }
 
-        player?.prepareAsync()
+        it.prepareAsync()
     }
 
     fun getCurrentSongPosition() = player?.currentPosition
 
-    val currentSongDuration: Int
-        get() = player?.duration
+    val getCurrentSongDuration = player?.duration
 
-    val isPlaying: Boolean
-        get() = player?.isPlaying
+    val isPlaying = player?.isPlaying
 
-    fun seek(position: Int) {
-        player?.seekTo(position)
-    }
+    fun seek(position: Int) = player?.seekTo(position)
 
     fun playCurrentSong() = player?.start()
 
     fun pauseCurrentSong() = player?.pause()
 
-    fun setWallpaperToAlbumCover() {
-        try {
-            val albumCoverUri = songs[currentSongPosition].albumCoverUri
-            val albumCoverBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, albumCoverUri)
-            wallpaperManager?.setBitmap(albumCoverBitmap)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
+    fun setWallpaperToAlbumCover() =
+            try {
+                val albumCoverUri = songs[currentSongPosition].albumCoverUri
+                val albumCoverBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, albumCoverUri)
+                wallpaperManager?.setBitmap(albumCoverBitmap)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
 
     private fun resetWallpaperToDefault() =
             try {

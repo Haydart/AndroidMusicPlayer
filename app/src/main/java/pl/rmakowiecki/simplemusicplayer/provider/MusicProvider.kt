@@ -15,14 +15,14 @@ import java.util.*
 const val ALBUM_COVER_DIRECTORY = "content://media/external/audio/albumart"
 
 class MusicProvider(private val context: Context) {
-    private var songList by lazy { retrieveDeviceSongList() }
-    private var albumList = mutableListOf<Album>()
-
+    var songList = mutableListOf<Song>()
+        private set
+    var albumList = mutableListOf<Album>()
+        private set
 
     private fun retrieveDeviceSongList() {
-        val list = mutableListOf<Song>()
         val musicResolver = context.contentResolver
-        val musicCursor = musicResolver.query(EXTERNAL_CONTENT_URI, null, null, null, null).use {
+        musicResolver.query(EXTERNAL_CONTENT_URI, null, null, null, null).use {
             if (it != null && it.moveToFirst()) {
                 val titleColumn = it.getColumnIndex(TITLE)
                 val idColumn = it.getColumnIndex(_ID)
@@ -39,11 +39,11 @@ class MusicProvider(private val context: Context) {
                     val albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY)
                     val albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, albumCoverId)
                     val songDuration = it.getLong(durationColumn)
-                    songList!!.add(Song(thisId, songTitle, songArtist, songAlbum, albumArtUri, songDuration.toInt()))
+                    songList.add(Song(thisId, songTitle, songArtist, songAlbum, albumArtUri, songDuration.toInt()))
                 } while (it.moveToNext())
             }
         }
-        return Collections.sort(songList!!) { a, b -> a.title.compareTo(b.title) }
+        return Collections.sort(songList) { a, b -> a.title.compareTo(b.title) }
     }
 
     private fun retrieveDeviceAlbumList() {
@@ -51,34 +51,31 @@ class MusicProvider(private val context: Context) {
         val musicResolver = context.contentResolver
         val projection = arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM, MediaStore.Audio.Albums.ARTIST, MediaStore.Audio.Albums.ALBUM_ART, MediaStore.Audio.Albums.NUMBER_OF_SONGS)
         val sortOrder = ALBUM + " COLLATE NOCASE ASC"
-        val musicCursor = musicResolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection, null, null, sortOrder)
-
-        if (musicCursor != null && musicCursor.moveToFirst()) {
-            val titleColumn = musicCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM)
-            val idColumn = musicCursor.getColumnIndex(MediaStore.Audio.Albums._ID)
-            val artistColumn = musicCursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST)
-            do {
-                val id = musicCursor.getLong(idColumn)
-                val name = musicCursor.getString(titleColumn)
-                val artist = musicCursor.getString(artistColumn)
-                val albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY)
-                val albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, id)
-                albumList!!.add(Album(id, name, artist, ArrayList<Song>(), albumArtUri))
-            } while (musicCursor.moveToNext())
+        musicResolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection, null, null, sortOrder).use {
+            if (it != null && it.moveToFirst()) {
+                val titleColumn = it.getColumnIndex(MediaStore.Audio.Albums.ALBUM)
+                val idColumn = it.getColumnIndex(MediaStore.Audio.Albums._ID)
+                val artistColumn = it.getColumnIndex(MediaStore.Audio.Albums.ARTIST)
+                do {
+                    val id = it.getLong(idColumn)
+                    val name = it.getString(titleColumn)
+                    val artist = it.getString(artistColumn)
+                    val albumCoverUriPath = Uri.parse(ALBUM_COVER_DIRECTORY)
+                    val albumArtUri = ContentUris.withAppendedId(albumCoverUriPath, id)
+                    albumList.add(Album(id, name, artist, ArrayList<Song>(), albumArtUri))
+                } while (it.moveToNext())
+            }
         }
-        musicCursor!!.close()
-        Collections.sort(albumList!!) { a, b -> a.artist.compareTo(b.artist) }
+
+        Collections.sort(albumList) { a, b -> a.artist.compareTo(b.artist) }
         matchSongsWithAlbums()
     }
 
 
-    private fun matchSongsWithAlbums() =
-            songList!!.forEach {
-                addSongToAlbum(it)
-            }
+    private fun matchSongsWithAlbums() = songList
+            .forEach { addSongToAlbum(it) }
 
-    private fun addSongToAlbum(song: Song) =
-            albumList!!
-                    .filter { it.name == song.albumName }
-                    .forEach { it.songs.add(song) }
+    private fun addSongToAlbum(song: Song) = albumList
+            .filter { it.name == song.albumName }
+            .forEach { it.songs.add(song) }
 }
